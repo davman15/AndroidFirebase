@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "199444344437",
+    "project_id": "animezone-82466",
+    "storage_bucket": "animezone-82466.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199444344437:android:ca79368245c8954e57923c",
+        "android_client_info": {
+          "package_name": "com.example.animezone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "199444344437-snuv7vb3fhjjqqoauk2tiaidog0j53de.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQdC_oGTNTUszu9pea8w5LMKZGLID1z_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "199444344437-snuv7vb3fhjjqqoauk2tiaidog0j53de.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
