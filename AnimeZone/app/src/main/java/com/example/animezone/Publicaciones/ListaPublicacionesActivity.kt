@@ -1,11 +1,10 @@
-package com.example.animezone
+package com.example.animezone.Publicaciones
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.animezone.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -53,13 +52,17 @@ class ListaPublicacionesActivity : AppCompatActivity() {
                 //Lo voy a mostrar por pantalla con un LinearLayout
                 layoutManager= LinearLayoutManager(this@ListaPublicacionesActivity)
                 //El recyclerView nos pide un adapter que es el q hemos hecho: minuto 40 y 1h por ahi
-                adapter=PublicacionAdapter(this@ListaPublicacionesActivity,publicaciones)
+                adapter= PublicacionAdapter(
+                    this@ListaPublicacionesActivity,
+                    publicaciones
+                )
             }
         }
 
         //Boton flotante que nos lleva a la activity donde haremos las publicaciones
         anadir.setOnClickListener{
-            val anadirIntent= Intent(this,CrearPublicacionActivity::class.java)
+            val anadirIntent= Intent(this,
+                CrearPublicacionActivity::class.java)
             startActivity(anadirIntent)
         }
     }

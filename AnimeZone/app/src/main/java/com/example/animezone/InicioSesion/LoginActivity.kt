@@ -1,12 +1,13 @@
-package com.example.animezone
+package com.example.animezone.InicioSesion
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
+import com.example.animezone.MenuPrincipalActivity
+import com.example.animezone.R
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.actionCodeSettings
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {

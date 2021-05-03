@@ -1,11 +1,15 @@
-package com.example.animezone
+package com.example.animezone.Publicaciones
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Html
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import com.example.animezone.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -37,6 +41,17 @@ class CrearPublicacionActivity : AppCompatActivity() {
         publicar_btn.setOnClickListener {
             //Selecciono el Uri de la imagen elegida por el usuario
             var fileUri = imagenUri
+            if(fileUri==null){
+                AlertDialog.Builder(this).apply {
+                    setTitle("Error")
+                    setMessage("Seleccione una foto para hacer una publicación")
+                    setPositiveButton(Html.fromHtml("<font color='#FFFFFF'>Si</font>")) { dialogInterface: DialogInterface, i: Int ->
+                        null
+                    }
+                }.show()
+                return@setOnClickListener
+            }
+
             //Aqui creo la subcarpeta de la referencia
             val folder = storageReferencia.child("imagenPublicacion/${fileUri!!.lastPathSegment}")
             //Lo subimos al Storage
@@ -52,7 +67,14 @@ class CrearPublicacionActivity : AppCompatActivity() {
                     val usuarioNombre = autentificacion.currentUser.displayName
                     val fotoPerfil=autentificacion.currentUser.photoUrl.toString()
                     //Cargo el objeto Publicacion con estos datos
-                    val publicacion = Publicacion(textoPublicacion, fecha, usuarioNombre,foto,fotoPerfil)
+                    val publicacion =
+                        Publicacion(
+                            textoPublicacion,
+                            fecha,
+                            usuarioNombre,
+                            foto,
+                            fotoPerfil
+                        )
                     //Creo la colleccion para Firebase y añado mi objeto con los datos
                     baseDatos.collection("Publicaciones").add(publicacion)
                         //Si esta correcto

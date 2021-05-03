@@ -7,4 +7,6 @@
     <color name="blanco">#FFFFFF</color>
     <color name="negro">#202732</color>
     <color name="rojo">#FF0000</color>
+    <color name="verde">#ff669900</color>
+    <color name="azul_chat">#ff0099cc</color>
 </resources>

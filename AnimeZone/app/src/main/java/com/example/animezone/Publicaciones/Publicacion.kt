@@ -1,4 +1,4 @@
-package com.example.animezone
+package com.example.animezone.Publicaciones
 
 import android.net.Uri
 import com.google.firebase.firestore.Exclude
@@ -8,7 +8,7 @@ import kotlin.collections.ArrayList
 class Publicacion(
     val post: String? = null,
     val fecha: Date? = null,
-    val usuarioNombre: String? = null,
+    var usuarioNombre: String? = null,
     val foto: String? = null,
     val fotoPerfil: String?=null,
     val likes: ArrayList<String>? = arrayListOf()

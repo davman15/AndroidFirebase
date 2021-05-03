@@ -1,9 +1,10 @@
-package com.example.animezone
+package com.example.animezone.Publicaciones
 
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +12,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.animezone.Perfil.PerfilAjenoActivity
+import com.example.animezone.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -30,7 +34,10 @@ class PublicacionAdapter(private val activity: Activity, private val dataset: Li
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         //(parent.context) es la activity
         val layout = LayoutInflater.from(parent.context).inflate(R.layout.card_post, parent, false)
-        return ViewHolder(layout)
+        return ViewHolder(
+            layout
+        )
+
     }
 
     //Aqui recogemos el numero de publicaciones q habra, la cantidad del array de Publicacion
@@ -42,7 +49,7 @@ class PublicacionAdapter(private val activity: Activity, private val dataset: Li
         //Obtener los likes, esto es un array
         val likes = publicacion.likes!!.toMutableList()
         //Variable donde identificaremos a la gente q le dio like a la publicacion
-        var genteLikes = likes.contains(autentificacion.uid)
+        var genteLikes = likes.contains(autentificacion.currentUser.displayName)
 
         holder.layout.megustaContador.text="${likes.size} Me gusta"
         holder.layout.nombrePersonatv.text = publicacion.usuarioNombre
@@ -58,19 +65,21 @@ class PublicacionAdapter(private val activity: Activity, private val dataset: Li
 
         //Le paso por parametro el boton del CardView y la lista de la gente con sus uids
         cambiarColor(genteLikes ,holder.layout.like_btn)
+
+
         //Si la gente le gusta y le da al boton
         holder.layout.like_btn.setOnClickListener {
             genteLikes=!genteLikes
             cambiarColor(genteLikes ,holder.layout.like_btn)
             //Si la gente le da like se añade el id del usuario a la lista de me gusta que tiene la publicacion
             if(genteLikes){
-                likes.add(autentificacion.uid!!)
+                likes.add(autentificacion.currentUser.displayName!!)
                 /*Toast.makeText(activity,holder.itemView.toString(), Toast.LENGTH_SHORT).show()
                 Toast.makeText(activity,holder.adapterPosition.toString(), Toast.LENGTH_SHORT).show()*/
             }
             //Si la gente que le dio like le da de nuevo al boton se quitara de la lista de likes de la publicacion
             else{
-                likes.remove(autentificacion.uid)
+                likes.remove(autentificacion.currentUser.displayName)
                 //Toast.makeText(activity,holder.layoutPosition.toString(), Toast.LENGTH_SHORT).show()
             }
 
@@ -81,7 +90,19 @@ class PublicacionAdapter(private val activity: Activity, private val dataset: Li
                 it.update(doc,"likes",likes)
                 null
             }
+
         }
+
+        //Esto es para mostrar el perfil al darle click a la foto de Perfil
+        holder.layout.imagenPerfilMenu.setOnClickListener {
+            irPerfilAjeno(holder)
+        }
+        //Lo mismo que arriba pero es por si le da al nombre o a la foto de Perfil
+        holder.layout.nombrePersonatv.setOnClickListener {
+            irPerfilAjeno(holder)
+        }
+
+
 
         //Cuando le des al boton compartir se abrirá las aplicaciones... y podre compartir la publicacion (Creo q solo el texto)
         holder.layout.compartir_btn.setOnClickListener {
@@ -119,11 +140,20 @@ class PublicacionAdapter(private val activity: Activity, private val dataset: Li
         }
     }
 
+    private fun irPerfilAjeno(holder: ViewHolder) {
+        var nombreUsuario: String = holder.layout.nombrePersonatv.text.toString()
+        val intent = Intent(activity, PerfilAjenoActivity::class.java)
+        intent.putExtra("UsuarioInfo", nombreUsuario)
+        startActivity(activity, intent, Bundle())
+    }
+
 
     private fun cambiarColor(gustado:Boolean, botonMegusta: Button) {
         //Si le di me gusta a la publicacion tendra un color
         if(gustado){
-            botonMegusta.setTextColor(ContextCompat.getColor(activity,R.color.blanco))
+            botonMegusta.setTextColor(ContextCompat.getColor(activity,
+                R.color.blanco
+            ))
         }
         //Sino me gusta la publicacion tendrá color negro el boton de Me gusta
         else{
