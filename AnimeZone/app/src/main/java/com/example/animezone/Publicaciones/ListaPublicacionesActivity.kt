@@ -56,6 +56,8 @@ class ListaPublicacionesActivity : AppCompatActivity() {
                     this@ListaPublicacionesActivity,
                     publicaciones
                 )
+
+
             }
         }
 

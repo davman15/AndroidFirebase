@@ -15,15 +15,47 @@ class PerfilAjenoActivity : AppCompatActivity() {
     private val autentificacion = Firebase.auth
     private val baseDatos = Firebase.firestore
     private val coleccionUsuarios = baseDatos.collection("Usuarios")
+    private var usuarioChat = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil_ajeno)
-        /*Segun que usuario es elegido se coge el valor de la etiqueta que contiene el id del usuario asi se puede pasar facil e identificar todos sus datos
-        y se pasa aqui a esta activity*/
-        val intentRecibe: Intent =intent
-        var usuarioNombre=intent.getStringExtra("UsuarioInfo")
-        nombre_imagenPerfilAjeno.setText(usuarioNombre)
+        /*Aqui recibe informacion desde la lista de Publicaciones*/
+        var usuarioNombre = intent.getStringExtra("UsuarioInfo").toString()
+        //Si no recibe informacion por la lista de Publicaciones
+        if(usuarioNombre=="null"){
+            //Recibirá informacion desde el chat
+            intent.getStringExtra("UsuarioChat")?.let {
+                usuarioChat = it
+            }
+            nombre_imagenPerfilAjeno.setText(usuarioChat)
+            coleccionUsuarios.document(usuarioChat).get()
+                .addOnSuccessListener {
+                    //Rellenar campos
+                    nombrePerfilAjeno_tx.setText(it.getString("nombreUsuario").toString())
+                    apellidosPerfilAjeno_tx.setText(it.getString("apellidos").toString())
+                    correoPerfilAjeno_tx.setText(it.getString("correo").toString())
+                    nicknamePerfilAjeno_tx.setText(it.getString("usuarioId").toString())
+                    if (apellidosPerfilAjeno_tx.text.toString() == "null") {
+                        apellidosPerfilAjeno_tx.setText("")
+                    }
 
+                    var urlImagen = it.getString("imagen").toString()
+                    Glide.with(this)
+                        .load(urlImagen)
+                        .fitCenter()
+                        .into(imagenPerfilAjeno)
+                }
+        }
+        else{
+            //Si recibe información pues será rellenado de la lista de publicaciones
+            mostrarDePublicaciones(usuarioNombre)
+        }
+    }
+
+
+
+    private fun mostrarDePublicaciones(usuarioNombre: String?) {
+        nombre_imagenPerfilAjeno.setText(usuarioNombre)
         coleccionUsuarios.document(usuarioNombre.toString()).get()
             .addOnSuccessListener {
                 //Rellenar campos
@@ -31,7 +63,7 @@ class PerfilAjenoActivity : AppCompatActivity() {
                 apellidosPerfilAjeno_tx.setText(it.getString("apellidos").toString())
                 correoPerfilAjeno_tx.setText(it.getString("correo").toString())
                 nicknamePerfilAjeno_tx.setText(it.getString("usuarioId").toString())
-                if(apellidosPerfilAjeno_tx.text.toString()=="null"){
+                if (apellidosPerfilAjeno_tx.text.toString() == "null") {
                     apellidosPerfilAjeno_tx.setText("")
                 }
 

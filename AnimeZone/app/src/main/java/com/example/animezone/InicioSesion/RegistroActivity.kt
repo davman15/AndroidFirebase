@@ -78,6 +78,27 @@ class RegistroActivity : AppCompatActivity() {
                                 }
                             }
                             .addOnSuccessListener {
+                                /*FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                                    if (!task.isSuccessful) {
+                                        Log.w("TAG", "Fetching FCM registration token failed", task.exception)
+                                        return@OnCompleteListener
+                                    }
+                                    else{
+
+                                    }
+                                })*/
+
+                                val mUser = FirebaseAuth.getInstance().currentUser
+                                mUser.getIdToken(true)
+                                    .addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            val idToken = task.result!!.token
+                                            println("Este es el token del dispositivo: $task")
+                                        } else {
+                                            // Handle error -> task.getException();
+                                        }
+                                    }
+
                                 //Meto la foto directamente en la variable
                                 val foto =
                                     "https://firebasestorage.googleapis.com/v0/b/animezone-82466.appspot.com/o/ImagenPerfilPorDefecto%2Fsinperfil.png?alt=media&token=79062551-4c24-45d7-9243-21030e6755b9"

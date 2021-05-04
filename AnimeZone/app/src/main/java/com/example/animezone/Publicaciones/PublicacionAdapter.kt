@@ -32,8 +32,8 @@ class PublicacionAdapter(private val activity: Activity, private val dataset: Li
 
     //Esto lo que crea es mi layout y retorna mi ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        //(parent.context) es la activity
         val layout = LayoutInflater.from(parent.context).inflate(R.layout.card_post, parent, false)
+
         return ViewHolder(
             layout
         )
