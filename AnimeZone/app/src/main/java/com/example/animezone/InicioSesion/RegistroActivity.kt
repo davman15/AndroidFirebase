@@ -4,11 +4,13 @@ import android.content.DialogInterface
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.text.Html
 import android.text.TextUtils.isEmpty
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import com.example.animezone.Clase.Usuario
+import com.example.animezone.ProgressBar.CargandoDialog
 import com.example.animezone.Publicaciones.Publicacion
 import com.example.animezone.R
 import com.google.firebase.auth.FirebaseAuth
@@ -64,7 +66,11 @@ class RegistroActivity : AppCompatActivity() {
                         nickname_texto.requestFocus()
                         nickname_texto.setError("Inserte otro nickname")
                     } else {
-                        //Toast.makeText(applicationContext, "Valor -> $resultado", Toast.LENGTH_SHORT).show()
+                        //Enseñar ProgressBar
+                        val cargando = CargandoDialog(this)
+                        cargando.empezarCarga()
+                        val handler = Handler()
+                        handler.postDelayed({ cargando.cancelable() }, 1400)
                         //Si todos los campos son rellenados correctamente
                         auth.createUserWithEmailAndPassword(email, contrasena)
                             .addOnCompleteListener {
@@ -78,27 +84,6 @@ class RegistroActivity : AppCompatActivity() {
                                 }
                             }
                             .addOnSuccessListener {
-                                /*FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-                                    if (!task.isSuccessful) {
-                                        Log.w("TAG", "Fetching FCM registration token failed", task.exception)
-                                        return@OnCompleteListener
-                                    }
-                                    else{
-
-                                    }
-                                })*/
-
-                                val mUser = FirebaseAuth.getInstance().currentUser
-                                mUser.getIdToken(true)
-                                    .addOnCompleteListener { task ->
-                                        if (task.isSuccessful) {
-                                            val idToken = task.result!!.token
-                                            println("Este es el token del dispositivo: $task")
-                                        } else {
-                                            // Handle error -> task.getException();
-                                        }
-                                    }
-
                                 //Meto la foto directamente en la variable
                                 val foto =
                                     "https://firebasestorage.googleapis.com/v0/b/animezone-82466.appspot.com/o/ImagenPerfilPorDefecto%2Fsinperfil.png?alt=media&token=79062551-4c24-45d7-9243-21030e6755b9"

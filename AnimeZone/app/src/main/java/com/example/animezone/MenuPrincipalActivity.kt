@@ -2,20 +2,19 @@ package com.example.animezone
 
 import android.content.DialogInterface
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import com.bumptech.glide.Glide
+import com.example.animezone.Buscador.BuscadorActivity
 import com.example.animezone.Chat.ListaChatsActivity
+import com.example.animezone.Configuracion.ConfiguracionActivity
 import com.example.animezone.Perfil.PerfilActivity
 import com.example.animezone.Publicaciones.ListaPublicacionesActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
 import kotlinx.android.synthetic.main.activity_menu_lateral.*
 import kotlinx.android.synthetic.main.activity_menu_principal.*
 
@@ -47,6 +46,11 @@ class MenuPrincipalActivity : AppCompatActivity() {
             }.show()
         }
 
+        configuracion_menuLateral.setOnClickListener {
+            val intent = Intent(this, ConfiguracionActivity::class.java)
+            startActivity(intent)
+        }
+
         //Sustituyo el valor del TextView, respecto al usuario que esta conectado y su imagen de Perfil
         cargarDatosPersonales()
 
@@ -70,6 +74,10 @@ class MenuPrincipalActivity : AppCompatActivity() {
             val intent = Intent(this, ListaChatsActivity::class.java)
             startActivity(intent)
         }
+        buscadorUsuarios.setOnClickListener {
+            val intent=Intent(this,BuscadorActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 
@@ -83,22 +91,21 @@ class MenuPrincipalActivity : AppCompatActivity() {
         cargarDatosPersonales()
     }
 
-
     private fun cargarDatosPersonales() {
-        usuarioActual.text = autentificacion.currentUser.displayName
-        Glide.with(this)
-            .load(autentificacion.currentUser.photoUrl)
-            .fitCenter()
-            .into(imagenPerfilMenu)
-        Glide.with(this)
-            .load(autentificacion.currentUser.photoUrl)
-            .fitCenter()
-            .into(imageView4)
+        if(autentificacion.currentUser!=null){
+            usuarioActual.text = autentificacion.currentUser.displayName
+            Glide.with(this)
+                .load(autentificacion.currentUser.photoUrl)
+                .fitCenter()
+                .into(imagenPerfilMenu)
+            Glide.with(this)
+                .load(autentificacion.currentUser.photoUrl)
+                .fitCenter()
+                .into(imageView4)
+        }
+        else{
+            autentificacion.signOut()
+            finish()
+        }
     }
-
-
-
-
-
-
 }

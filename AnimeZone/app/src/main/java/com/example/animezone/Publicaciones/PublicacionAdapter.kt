@@ -58,10 +58,13 @@ class PublicacionAdapter(private val activity: Activity, private val dataset: Li
         //Asi se llama a la imagen publicada
         Glide.with(activity)
             .load(publicacion.foto)
-            .fitCenter()
             .into(holder.layout.imagenPublicacion)
-        //Aqui llamo a la imagen del perfil del usuario
-        Glide.with(activity).load(publicacion.fotoPerfil).fitCenter().into(holder.layout.imagenPerfilMenu)
+        //Coge siempre la foto de perfil del usuario
+        basedeDatos.collection("Usuarios").document(publicacion.usuarioNombre.toString()).get()
+            .addOnSuccessListener {
+                //Aqui llamo a la imagen del perfil del usuario
+                Glide.with(activity).load(it.getString("imagen").toString()).fitCenter().into(holder.layout.imagenPerfilMenu)
+        }
 
         //Le paso por parametro el boton del CardView y la lista de la gente con sus uids
         cambiarColor(genteLikes ,holder.layout.like_btn)
@@ -82,7 +85,6 @@ class PublicacionAdapter(private val activity: Activity, private val dataset: Li
                 likes.remove(autentificacion.currentUser.displayName)
                 //Toast.makeText(activity,holder.layoutPosition.toString(), Toast.LENGTH_SHORT).show()
             }
-
             //Esto de aqui es por si un usuario que esta tambien conectado le da a la vez que tu like a una publicacion
             //Entonces lo que se hace aqui abajo es actualizarlo instantaneamente el numero de likes, del campo likes en la base de datos
             val doc=basedeDatos.collection("Publicaciones").document(publicacion.uid!!)

@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.animezone.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_listapublicaciones.*
@@ -39,8 +40,8 @@ class ListaPublicacionesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listapublicaciones)
-        //Creo una coleccion de Publicaciones y convierto en objetos de tipo Publicaciones
-        basedeDatos.collection("Publicaciones").addSnapshotListener{ value, error ->
+        //Creo una coleccion de Publicaciones y convierto en objetos de tipo Publicaciones y lo ordeno desde la ultima publicacion a la primera publicada
+        basedeDatos.collection("Publicaciones").orderBy("fecha", Query.Direction.DESCENDING).addSnapshotListener{ value, error ->
             val publicaciones=value!!.toObjects(Publicacion::class.java)
             //Le agrego el id del usuario quien hizo la publicacion
             publicaciones.forEachIndexed { index, publicacion ->
@@ -56,8 +57,6 @@ class ListaPublicacionesActivity : AppCompatActivity() {
                     this@ListaPublicacionesActivity,
                     publicaciones
                 )
-
-
             }
         }
 

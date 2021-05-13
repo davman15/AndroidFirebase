@@ -35,6 +35,8 @@ class ChatAdapter(val chatClick: (Chat) -> Unit) : RecyclerView.Adapter<ChatAdap
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
         var usuarioActual = autentificacion.currentUser.displayName
         val conversaciones = chats[position]
+
+        //Aqui se gestiona para que en el chat se vea las mismas conversaciones pero el perfil cambiado
         if (conversaciones.usuarios.first().toString() == usuarioActual) {
             holder.itemView.chatNombre.text = conversaciones.usuarios.last()
             holder.itemView.usuariosTextView.text = chats[position].usuarios.toString()

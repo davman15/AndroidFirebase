@@ -13,9 +13,8 @@
 
     <!-- Este tema es para el SplashScreen -->
     <style name="SplashScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
-
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/negro</item>
+        <item name="colorPrimaryDark">@color/negro</item>
+        <item name="colorAccent">@color/negro</item>
     </style>
 </resources>

@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Html
 import android.text.TextUtils.isEmpty
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.example.animezone.Clase.Usuario
@@ -24,8 +25,10 @@ import kotlinx.android.synthetic.main.activity_perfil.*
 class PerfilActivity : AppCompatActivity() {
     //Codigo el que queramos
     private val file = 1
+
     //Raiz del Storage
     private val storageReferencia = Firebase.storage.getReference("ImagenesPerfil")
+
     //Selecciono el Uri de la imagen que va a elegir el usuario
     private var imagenUri: Uri? = null
     private var contador = 1
@@ -57,7 +60,7 @@ class PerfilActivity : AppCompatActivity() {
                 correoPerfil_texto.setText(it.getString("correo").toString())
                 nicknamePerfil_texto.setText(it.getString("usuarioId").toString())
                 contrasenaPerfil_texto.setText(it.getString("contrasena").toString())
-                if(apellidosPerfil_texto.text.toString()=="null"){
+                if (apellidosPerfil_texto.text.toString() == "null") {
                     apellidosPerfil_texto.setText("")
                 }
 
@@ -69,7 +72,6 @@ class PerfilActivity : AppCompatActivity() {
             }
 
         //Toast.makeText(this, autentificacion.currentUser.email, Toast.LENGTH_SHORT).show()
-
 
         //Para q este desactivado tiene q ser el desactivar false
         editarPerfil_btn.setOnClickListener {
@@ -136,7 +138,6 @@ class PerfilActivity : AppCompatActivity() {
     private fun camposPerfil(desactivador: Boolean) {
         nombrePerfil_texto.isEnabled = desactivador
         apellidosPerfil_texto.isEnabled = desactivador
-        //contrasenaPerfil_texto.isEnabled = desactivador
     }
 
     private fun actualizarRegistros(
@@ -152,14 +153,35 @@ class PerfilActivity : AppCompatActivity() {
             foto = autentificacion.currentUser.photoUrl.toString()
             actualizarPerfil(nombre, apellidos, correo, usuarioId, contrasena, foto)
         } else {
-            //Aqui creo la subcarpeta de la referencia
-            val folder = storageReferencia.child("{$usuarioId}/${imagenUri!!.lastPathSegment}")
-            folder.putFile(imagenUri!!).addOnSuccessListener {
-                //Si se sube bien al Storage, Creo el link con downloadURL
-                folder.downloadUrl.addOnSuccessListener { urlImagen ->
-                    foto = urlImagen.toString()
-                    actualizarPerfil(nombre, apellidos, correo, usuarioId, contrasena, foto)
+            //El apaño es el siguiente, la primera vez va a fallar en eliminar la foto ya que no existe esa referencia, entonces ira al addOnFailureListener
+            storageReferencia.child("$usuarioId/" + autentificacion.currentUser.displayName.toString())
+                .delete()
+                .addOnSuccessListener {
+                    crearReferenciaSustituir(usuarioId, foto, nombre, apellidos, correo, contrasena)
                 }
+                .addOnFailureListener {
+                    crearReferenciaSustituir(usuarioId, foto, nombre, apellidos, correo, contrasena)
+                }
+        }
+    }
+
+    private fun crearReferenciaSustituir(
+        usuarioId: String,
+        foto: String,
+        nombre: String,
+        apellidos: String,
+        correo: String,
+        contrasena: String
+    ) {
+        //Aqui creo la subcarpeta de la referencia
+        var foto1 = foto
+        val folder =
+            storageReferencia.child("$usuarioId/" + autentificacion.currentUser.displayName.toString())
+        folder.putFile(imagenUri!!).addOnSuccessListener {
+            //Si se sube bien al Storage, Creo el link con downloadURL
+            folder.downloadUrl.addOnSuccessListener { urlImagen ->
+                foto1 = urlImagen.toString()
+                actualizarPerfil(nombre, apellidos, correo, usuarioId, contrasena, foto1)
             }
         }
     }

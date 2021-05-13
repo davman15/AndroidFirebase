@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.activity_perfil.*
 import kotlinx.android.synthetic.main.activity_perfil_ajeno.*
 
 class PerfilAjenoActivity : AppCompatActivity() {
-    private val autentificacion = Firebase.auth
     private val baseDatos = Firebase.firestore
     private val coleccionUsuarios = baseDatos.collection("Usuarios")
     private var usuarioChat = ""

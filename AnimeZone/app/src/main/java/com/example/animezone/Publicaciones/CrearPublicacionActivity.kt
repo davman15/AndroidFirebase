@@ -37,7 +37,6 @@ class CrearPublicacionActivity : AppCompatActivity() {
             seleccionarFotoGaleria()
         }
 
-
         publicar_btn.setOnClickListener {
             //Selecciono el Uri de la imagen elegida por el usuario
             var fileUri = imagenUri
@@ -86,7 +85,6 @@ class CrearPublicacionActivity : AppCompatActivity() {
                         }
                 }
             }
-
         }
     }
 

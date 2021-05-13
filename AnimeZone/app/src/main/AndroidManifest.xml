@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.animezone" >
+    package="com.example.animezone">
 
     <application
         android:allowBackup="true"
@@ -8,9 +8,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true" >
-        <activity android:name=".Chat.ChatActivity" >
-        </activity>
+        android:usesCleartextTraffic="true">
+        <activity android:name=".Buscador.BuscadorActivity"></activity>
+        <activity android:name=".Configuracion.ConfiguracionActivity" />
+        <activity android:name=".Chat.ChatActivity" />
         <activity android:name=".Chat.ListaChatsActivity" />
         <activity android:name=".Perfil.PerfilAjenoActivity" />
         <activity android:name=".Perfil.PerfilActivity" />
@@ -18,7 +19,7 @@
         <activity android:name=".MenuPrincipalActivity" />
         <activity
             android:name=".PantallaInicio.SplashScreen"
-            android:theme="@style/SplashScreenTheme" >
+            android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

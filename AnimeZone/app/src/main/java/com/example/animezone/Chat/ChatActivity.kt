@@ -18,12 +18,12 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.activity_menu_principal.*
 import kotlinx.android.synthetic.main.card_post.view.*
+import java.util.*
 
 class ChatActivity : AppCompatActivity() {
     private var chat_id = ""
     private var usuario = ""
     private var baseDatos = Firebase.firestore
-    private var autentificacion = Firebase.auth
     private var otroUsuario = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,6 +105,10 @@ class ChatActivity : AppCompatActivity() {
                 mensaje = mensajeCampoTexto.text.toString(),
                 from = usuario
             )
+            //Utilizo este update para que cuando alguien hable a otra persona se le ponga este chat en primer lugar de su lista de chats
+            baseDatos.collection("Usuarios").document(nombreOtroUsuarioChat.text.toString()).collection("chats")
+                .document(chat_id).update("fechaChat", Date()).addOnSuccessListener {
+                }
             baseDatos.collection("chats").document(chat_id).collection("Mensajes").document()
                 .set(mensaje)
 
