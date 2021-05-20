@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.animezone.Clase.Usuario
 import com.example.animezone.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
@@ -15,6 +16,7 @@ class ListaPublicacionesActivity : AppCompatActivity() {
     //Variables de Firebase
     private val autentificacion= FirebaseAuth.getInstance()
     private val basedeDatos= Firebase.firestore
+
     //Array de imagenes
     var imagenes= intArrayOf(
         R.drawable.kimi,
@@ -42,23 +44,23 @@ class ListaPublicacionesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_listapublicaciones)
         //Creo una coleccion de Publicaciones y convierto en objetos de tipo Publicaciones y lo ordeno desde la ultima publicacion a la primera publicada
         basedeDatos.collection("Publicaciones").orderBy("fecha", Query.Direction.DESCENDING).addSnapshotListener{ value, error ->
-            val publicaciones=value!!.toObjects(Publicacion::class.java)
+            var publicaciones=value!!.toObjects(Publicacion::class.java)
             //Le agrego el id del usuario quien hizo la publicacion
             publicaciones.forEachIndexed { index, publicacion ->
                 publicacion.uid=value.documents[index].id
             }
+
             reciclerView.apply {
                 //El tamaño es fijo del recyclerView
                 setHasFixedSize(true)
-                //Lo voy a mostrar por pantalla con un LinearLayout
                 layoutManager= LinearLayoutManager(this@ListaPublicacionesActivity)
-                //El recyclerView nos pide un adapter que es el q hemos hecho: minuto 40 y 1h por ahi
                 adapter= PublicacionAdapter(
                     this@ListaPublicacionesActivity,
                     publicaciones
                 )
             }
         }
+
 
         //Boton flotante que nos lleva a la activity donde haremos las publicaciones
         anadir.setOnClickListener{

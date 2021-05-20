@@ -17,8 +17,8 @@ class ChatAdapter(val chatClick: (Chat) -> Unit) : RecyclerView.Adapter<ChatAdap
     private var autentificacion = Firebase.auth
     private var baseDatos = Firebase.firestore
 
-    fun setData(list: List<Chat>) {
-        chats = list
+    fun setData(lista: List<Chat>) {
+        chats = lista
         notifyDataSetChanged()
     }
 
@@ -44,10 +44,8 @@ class ChatAdapter(val chatClick: (Chat) -> Unit) : RecyclerView.Adapter<ChatAdap
                 .get()
                 .addOnSuccessListener {
                     var urlImagen = it.getString("imagen").toString()
-                    Glide.with(holder.itemView.context)
-                        .load(urlImagen)
-                        .fitCenter()
-                        .into(holder.itemView.imagenPerfilListaChat)
+                    comprobarImagen(urlImagen, holder)
+
                 }
         } else if (conversaciones.usuarios.last().toString() == usuarioActual) {
             holder.itemView.chatNombre.text = conversaciones.usuarios.first()
@@ -56,14 +54,28 @@ class ChatAdapter(val chatClick: (Chat) -> Unit) : RecyclerView.Adapter<ChatAdap
                 .get()
                 .addOnSuccessListener {
                     var urlImagen = it.getString("imagen").toString()
-                    Glide.with(holder.itemView.context)
-                        .load(urlImagen)
-                        .fitCenter()
-                        .into(holder.itemView.imagenPerfilListaChat)
+                    comprobarImagen(urlImagen, holder)
                 }
         }
         holder.itemView.setOnClickListener {
             chatClick(conversaciones)
+        }
+    }
+
+    private fun comprobarImagen(
+        urlImagen: String,
+        holder: ChatViewHolder
+    ) {
+        if (urlImagen == "null") {
+            Glide.with(holder.itemView.context)
+                .load("https://firebasestorage.googleapis.com/v0/b/animezone-82466.appspot.com/o/ImagenPerfilPorDefecto%2Fsinperfil.png?alt=media&token=79062551-4c24-45d7-9243-21030e6755b9")
+                .fitCenter()
+                .into(holder.itemView.imagenPerfilListaChat)
+        } else {
+            Glide.with(holder.itemView.context)
+                .load(urlImagen)
+                .fitCenter()
+                .into(holder.itemView.imagenPerfilListaChat)
         }
     }
 

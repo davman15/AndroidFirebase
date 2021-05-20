@@ -9,4 +9,5 @@
     <color name="rojo">#FF0000</color>
     <color name="verde">#ff669900</color>
     <color name="azul_chat">#ff0099cc</color>
+    <color name="gray">#808080</color>
 </resources>

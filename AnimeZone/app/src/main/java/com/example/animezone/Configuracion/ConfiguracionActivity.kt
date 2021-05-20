@@ -29,30 +29,29 @@ class ConfiguracionActivity : AppCompatActivity() {
             setTitle("Eliminar Cuenta")
             setMessage("¿Estás seguro que quiere eliminar su cuenta?")
             setPositiveButton(Html.fromHtml("<font color='#FFFFFF'>Si</font>")) { dialogInterface: DialogInterface, i: Int ->
+                //Aqui borro al usuario de la coleccion de Usuarios
                 baseDatos.collection("Usuarios")
                     .document(autentificacion.currentUser.displayName)
                     .delete()
                     .addOnSuccessListener {
                         usuarioIdo = autentificacion.currentUser.displayName
-                        baseDatos.collection("Usuarios")
-                            .document(autentificacion.currentUser.displayName)
-                            .delete()
-                            .addOnSuccessListener {
-                                usuarioConectado.delete()
-                                    .addOnCompleteListener { task ->
-                                        if (task.isSuccessful) {
-                                            baseDatos.collection("Publicaciones")
-                                                .whereEqualTo("usuarioNombre", usuarioIdo).get()
-                                                .addOnSuccessListener {
-                                                    for (documento in it) {
-                                                        baseDatos.collection("Publicaciones")
-                                                            .document(documento.id).delete()
-                                                    }
-                                                }
-                                            finish()
+                        //Aqui borro el correo y contraseña del usuario
+                        usuarioConectado.delete()
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    //Aqui borro las publicaciones que tenia el usuario
+                                    baseDatos.collection("Publicaciones")
+                                        .whereEqualTo("usuarioNombre", usuarioIdo).get()
+                                        .addOnSuccessListener {
+                                            for (documento in it) {
+                                                baseDatos.collection("Publicaciones")
+                                                    .document(documento.id).delete()
+                                            }
                                         }
-                                    }
+                                    finish()
+                                }
                             }
+
                     }
             }
             setNegativeButton(Html.fromHtml("<font color='#FFFFFF'>No</font>"), null)

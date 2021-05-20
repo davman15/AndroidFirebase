@@ -11,6 +11,7 @@ class Publicacion(
     var usuarioNombre: String? = null,
     val foto: String? = null,
     val fotoPerfil: String?=null,
+    val titulo:String?=null,
     val likes: ArrayList<String>? = arrayListOf()
 ) {
     //Esto es para que el id que siempre pone firebase al crear una publicacion no nos lo ponga
@@ -18,7 +19,4 @@ class Publicacion(
     @set:Exclude
     @get:Exclude
     var uid: String? = null
-
-    //Firebase necesita un constructor vacio para q el pueda añadir los atributos
-    constructor() : this(null, null, null, null, null)
 }

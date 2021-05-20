@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.animezone.Clase.Usuario
 import com.example.animezone.R
 import kotlinx.android.synthetic.main.chat_item.view.*
+import kotlinx.android.synthetic.main.lista_seguidores.view.*
 import java.util.stream.Collectors
 
 class BuscadorAdapter(val usuarioClick: (Usuario) -> Unit) :
@@ -16,16 +17,12 @@ class BuscadorAdapter(val usuarioClick: (Usuario) -> Unit) :
     var usuariosLista: List<Usuario> = emptyList()
     var originalUsuarios:List<Usuario> = emptyList()
 
-    fun setUsuarios(list: MutableList<Usuario>) {
-        usuariosLista = list
-        notifyDataSetChanged()
-    }
-
     //Metodo que sirve para que el usuario pueda encontrar el perfil que quiera
-    fun filtradorUsuarios(list: MutableList<Usuario>,caracterBuscador: String) {
-        usuariosLista = list
+    fun filtradorUsuarios(lista: MutableList<Usuario>,caracterBuscador: String) {
+        usuariosLista = lista
         if (caracterBuscador.isEmpty()) {
             (usuariosLista as MutableList<Usuario>).clear()
+
             (usuariosLista as MutableList<Usuario>).addAll(originalUsuarios!!)
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -42,7 +39,7 @@ class BuscadorAdapter(val usuarioClick: (Usuario) -> Unit) :
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BuscadorViewHolder {
-        val layout = LayoutInflater.from(parent.context).inflate(R.layout.chat_item, parent, false)
+        val layout = LayoutInflater.from(parent.context).inflate(R.layout.lista_seguidores, parent, false)
         return BuscadorViewHolder(layout)
     }
 
@@ -52,17 +49,15 @@ class BuscadorAdapter(val usuarioClick: (Usuario) -> Unit) :
 
     override fun onBindViewHolder(holder: BuscadorViewHolder, position: Int) {
         val usuarios = usuariosLista[position]
-        holder.itemView.chatNombre.text=usuarios.usuarioId
-        holder.itemView.usuariosTextView.setText("")
+        holder.itemView.nombre_Seguidor.text=usuarios.usuarioId
         Glide.with(holder.itemView.context)
             .load(usuarios.imagen)
             .fitCenter()
-            .into(holder.itemView.imagenPerfilListaChat)
+            .into(holder.itemView.foto_Seguidor)
 
         holder.itemView.setOnClickListener {
             usuarioClick(usuarios)
         }
-
     }
 
     class BuscadorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)

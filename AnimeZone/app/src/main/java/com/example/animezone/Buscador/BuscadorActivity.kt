@@ -2,13 +2,14 @@ package com.example.animezone.Buscador
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.animezone.Clase.Usuario
+import com.example.animezone.Perfil.PerfilActivity
 import com.example.animezone.Perfil.PerfilAjenoActivity
 import com.example.animezone.R
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_buscador.*
@@ -16,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_buscador.*
 
 class BuscadorActivity : AppCompatActivity() {
     private var baseDatos = Firebase.firestore
+    private var autentificacion = Firebase.auth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_buscador)
@@ -53,7 +55,11 @@ class BuscadorActivity : AppCompatActivity() {
 
     private fun seleccionarContacto(usuario: Usuario) {
         val intent = Intent(this, PerfilAjenoActivity::class.java)
+        val intentoPropio = Intent(this, PerfilActivity::class.java)
         intent.putExtra("UsuarioChat", usuario.usuarioId.toString())
-        startActivity(intent)
+        if (usuario.usuarioId.toString() == autentificacion.currentUser.displayName)
+            startActivity(intentoPropio)
+        else
+            startActivity(intent)
     }
 }

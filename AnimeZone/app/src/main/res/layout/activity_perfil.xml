@@ -74,14 +74,11 @@
         android:id="@+id/imagenPerfil"
         android:layout_width="121dp"
         android:layout_height="124dp"
-        android:layout_marginStart="145dp"
-        android:layout_marginLeft="145dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="145dp"
-        android:layout_marginRight="145dp"
+        android:layout_marginTop="13dp"
         android:clickable="false"
         android:foreground="?android:attr/selectableItemBackground"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView21"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -90,9 +87,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginRight="26dp"
         android:textColor="@color/blanco"
-        android:textSize="26sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@+id/descripcion_texto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagenPerfil" />
 
@@ -102,7 +101,7 @@
         android:layout_height="20dp"
         android:layout_marginStart="56dp"
         android:layout_marginLeft="56dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="302dp"
         android:layout_marginRight="302dp"
         android:text="Nombre"
@@ -191,7 +190,7 @@
         android:id="@+id/editarPerfil_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/boton_editar_perfil"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
@@ -199,6 +198,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contrasenaPerfil_texto" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginRight="100dp"
+        android:text="Descripción"
+        android:textColor="@color/blanco"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imagenPerfil"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/descripcion_texto"
+        android:layout_width="178dp"
+        android:layout_height="104dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:enabled="false"
+        android:text="Me encanta el anime. espero que nos llevemos bien!! xD"
+        android:textColor="@color/blanco"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imagenPerfil"
+        app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

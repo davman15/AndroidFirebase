@@ -37,7 +37,30 @@ class CrearPublicacionActivity : AppCompatActivity() {
             seleccionarFotoGaleria()
         }
 
+
+
         publicar_btn.setOnClickListener {
+            if(titulo_publicacion.text.toString()==""){
+                AlertDialog.Builder(this).apply {
+                    setTitle("Título Obligatorio")
+                    setMessage("Añada un título a su publicación")
+                    setPositiveButton(Html.fromHtml("<font color='#FFFFFF'>Aceptar</font>")) { dialogInterface: DialogInterface, i: Int ->
+                        null
+                    }
+                }.show()
+                return@setOnClickListener
+            }
+
+            if(descripcion_publicacion.text.toString()==""){
+                AlertDialog.Builder(this).apply {
+                    setTitle("Descripción Obligatoria")
+                    setMessage("Añada una descripción a su publicación")
+                    setPositiveButton(Html.fromHtml("<font color='#FFFFFF'>Aceptar</font>")) { dialogInterface: DialogInterface, i: Int ->
+                        null
+                    }
+                }.show()
+                return@setOnClickListener
+            }
             //Selecciono el Uri de la imagen elegida por el usuario
             var fileUri = imagenUri
             if(fileUri==null){
@@ -59,20 +82,22 @@ class CrearPublicacionActivity : AppCompatActivity() {
                 folder.downloadUrl.addOnSuccessListener { urlImagen ->
                     val foto=urlImagen.toString()
                     //El texto escrito
-                    val textoPublicacion = descripcion_publicacion.text.toString()
+                    val descripcionPublicacion = descripcion_publicacion.text.toString()
                     //La fecha cuando lo escribe
                     val fecha = Date()
                     //El nombre del usuario que lo ha publicado que esta con la sesion activada
                     val usuarioNombre = autentificacion.currentUser.displayName
                     val fotoPerfil=autentificacion.currentUser.photoUrl.toString()
+                    val tituloPublicacion=titulo_publicacion.text.toString()
                     //Cargo el objeto Publicacion con estos datos
                     val publicacion =
                         Publicacion(
-                            textoPublicacion,
+                            descripcionPublicacion,
                             fecha,
                             usuarioNombre,
                             foto,
-                            fotoPerfil
+                            fotoPerfil,
+                            tituloPublicacion
                         )
                     //Creo la colleccion para Firebase y añado mi objeto con los datos
                     baseDatos.collection("Publicaciones").add(publicacion)

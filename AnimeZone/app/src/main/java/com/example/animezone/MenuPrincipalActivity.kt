@@ -14,20 +14,25 @@ import com.example.animezone.Chat.ListaChatsActivity
 import com.example.animezone.Configuracion.ConfiguracionActivity
 import com.example.animezone.Perfil.PerfilActivity
 import com.example.animezone.Publicaciones.ListaPublicacionesActivity
+import com.example.animezone.PublicacionesFavoritas.PublicacionesFavoritasActivity
+import com.example.animezone.Seguidores.SeguidoresActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_menu_lateral.*
 import kotlinx.android.synthetic.main.activity_menu_principal.*
 
 class MenuPrincipalActivity : AppCompatActivity() {
     private val autentificacion = FirebaseAuth.getInstance()
+    private var basedeDatos = Firebase.firestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu_principal)
 
         //Con esto llamo a mi cardview de la activity de MenuLateral
-        val menuLateral : CardView = findViewById(R.id.MenuLateralCerrarSesion)
+        val menuLateral: CardView = findViewById(R.id.MenuLateralCerrarSesion)
 
-        val menuLateralPerfil:CardView=findViewById(R.id.MenuLateralPerfil)
+        val menuLateralPerfil: CardView = findViewById(R.id.MenuLateralPerfil)
         menuLateralPerfil.setOnClickListener {
             val intent = Intent(this, PerfilActivity::class.java)
             startActivity(intent)
@@ -74,10 +79,22 @@ class MenuPrincipalActivity : AppCompatActivity() {
             val intent = Intent(this, ListaChatsActivity::class.java)
             startActivity(intent)
         }
+        //Ir al buscador
         buscadorUsuarios.setOnClickListener {
-            val intent=Intent(this,BuscadorActivity::class.java)
+            val intent = Intent(this, BuscadorActivity::class.java)
             startActivity(intent)
         }
+        //Ir a ver los seguidores que tiene el propio contacto
+        ver_Seguidores.setOnClickListener {
+            val intent = Intent(this, SeguidoresActivity::class.java)
+            startActivity(intent)
+        }
+
+        listaPublicacionesFavoritas.setOnClickListener {
+            val intent = Intent(this, PublicacionesFavoritasActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
 
@@ -86,24 +103,19 @@ class MenuPrincipalActivity : AppCompatActivity() {
         super.onResume()
         cargarDatosPersonales()
     }
-    override fun onPause() {
-        super.onPause()
-        cargarDatosPersonales()
-    }
+
 
     private fun cargarDatosPersonales() {
-        if(autentificacion.currentUser!=null){
+        if (autentificacion.currentUser != null) {
             usuarioActual.text = autentificacion.currentUser.displayName
-            Glide.with(this)
-                .load(autentificacion.currentUser.photoUrl)
-                .fitCenter()
-                .into(imagenPerfilMenu)
-            Glide.with(this)
-                .load(autentificacion.currentUser.photoUrl)
-                .fitCenter()
-                .into(imageView4)
-        }
-        else{
+            Glide.with(this).load(autentificacion.currentUser.photoUrl).fitCenter()
+                .into(imagenMenuLateralPerfil)
+            basedeDatos.collection("Usuarios").document(autentificacion.currentUser.displayName)
+                .addSnapshotListener { snapshot, e ->
+                    Glide.with(this).load(snapshot?.getString("imagen").toString()).fitCenter()
+                        .into(imagenPerfilMenu)
+                }
+        } else {
             autentificacion.signOut()
             finish()
         }

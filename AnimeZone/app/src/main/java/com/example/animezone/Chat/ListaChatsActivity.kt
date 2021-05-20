@@ -24,6 +24,17 @@ class ListaChatsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_chats)
+        //Aqui recibo la información si el usuario quiere chatear con otro usuario
+        var usuarioChat=intent.getStringExtra("UsuarioChat").toString()
+
+        //De tal forma si quiere hablar con alguien se rellena el buscador con el contacto que queria y si no pues el texto sera null
+        if(usuarioChat=="null"){
+            nuevoChat_tx.setText("")
+        }
+        else{
+            nuevoChat_tx.setText(usuarioChat)
+        }
+
 
         if (usuarioBusqueda.isNotEmpty()) {
             iniciarBusqueda()

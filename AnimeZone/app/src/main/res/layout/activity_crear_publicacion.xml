@@ -13,8 +13,9 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="Escribe lo que piensas"
+        android:hint="Escribe una descripción"
         android:inputType="textMultiLine"
+        android:textColor="@color/blanco"
         android:textColorHighlight="@color/blanco"
         android:textColorHint="#F8E7E7"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +42,7 @@
         android:id="@+id/textView"
         android:layout_width="155dp"
         android:layout_height="30dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:text="Sube una foto"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
@@ -53,11 +54,24 @@
         android:id="@+id/foto_Publicacion"
         android:layout_width="328dp"
         android:layout_height="361dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="23dp"
         android:background="@drawable/anadir_ic"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/titulo_publicacion" />
+
+    <EditText
+        android:id="@+id/titulo_publicacion"
+        android:layout_width="323dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Escribe un título"
+        android:inputType="textPersonName"
+        android:textColor="@color/blanco"
+        android:textColorHint="@color/blanco"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

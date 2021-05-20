@@ -89,7 +89,7 @@ class RegistroActivity : AppCompatActivity() {
                                     "https://firebasestorage.googleapis.com/v0/b/animezone-82466.appspot.com/o/ImagenPerfilPorDefecto%2Fsinperfil.png?alt=media&token=79062551-4c24-45d7-9243-21030e6755b9"
                                 //Creo el objeto que voy a enviar a la base de datos
                                 val usuario: Usuario =
-                                    Usuario(nombre, null, email, usuarioId, contrasena, foto)
+                                    Usuario(nombre, null, email, usuarioId, contrasena, foto,"Me encanta el anime. espero que nos llevemos bien!! xD")
                                 //Creo la coleccion que va a haber en la base de datos que se va a llamar usuarios , un documento que su id va a ser el nickname, y el objeto usuario lo meto a la base de datos
                                 basedeDatos.collection("Usuarios").document(usuarioId).set(usuario)
                                 //Aqui lo que hago es si esta bien, el registro, (tuve un problema que no me cogia el displayName del que esta iniciado sesion)

@@ -40,6 +40,7 @@ class PerfilActivity : AppCompatActivity() {
     private var campoCorreoTextoPerfil = ""
     private var campoNombreIdTextoPerfil = ""
     private var campoContrasenaPerfil = ""
+    private var campoDescripcionTextoPerfil=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +61,7 @@ class PerfilActivity : AppCompatActivity() {
                 correoPerfil_texto.setText(it.getString("correo").toString())
                 nicknamePerfil_texto.setText(it.getString("usuarioId").toString())
                 contrasenaPerfil_texto.setText(it.getString("contrasena").toString())
+                descripcion_texto.setText(it.getString("descripcion").toString())
                 if (apellidosPerfil_texto.text.toString() == "null") {
                     apellidosPerfil_texto.setText("")
                 }
@@ -71,7 +73,7 @@ class PerfilActivity : AppCompatActivity() {
                     .into(imagenPerfil)
             }
 
-        //Toast.makeText(this, autentificacion.currentUser.email, Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, "ola", Toast.LENGTH_SHORT).show()
 
         //Para q este desactivado tiene q ser el desactivar false
         editarPerfil_btn.setOnClickListener {
@@ -90,6 +92,7 @@ class PerfilActivity : AppCompatActivity() {
                 campoCorreoTextoPerfil = correoPerfil_texto.text.toString()
                 campoNombreIdTextoPerfil = nicknamePerfil_texto.text.toString()
                 campoContrasenaPerfil = contrasenaPerfil_texto.text.toString()
+                campoDescripcionTextoPerfil=descripcion_texto.text.toString()
 
                 //Validar Campos
                 when {
@@ -118,6 +121,11 @@ class PerfilActivity : AppCompatActivity() {
                         contrasenaPerfil_texto.requestFocus()
                         return@setOnClickListener
                     }
+                    isEmpty(campoDescripcionTextoPerfil)->{
+                        descripcion_texto.setError("Introduzca su descripción")
+                        descripcion_texto.requestFocus()
+                        return@setOnClickListener
+                    }
                 }
 
                 //Si esta bien actualiza los campos
@@ -126,7 +134,8 @@ class PerfilActivity : AppCompatActivity() {
                     campoApellidosTextoPerfil,
                     campoCorreoTextoPerfil,
                     campoNombreIdTextoPerfil,
-                    campoContrasenaPerfil
+                    campoContrasenaPerfil,
+                    campoDescripcionTextoPerfil
                 )
                 camposPerfil(false)
                 editarPerfil_btn.setText("Editar Perfil")
@@ -138,6 +147,7 @@ class PerfilActivity : AppCompatActivity() {
     private fun camposPerfil(desactivador: Boolean) {
         nombrePerfil_texto.isEnabled = desactivador
         apellidosPerfil_texto.isEnabled = desactivador
+        descripcion_texto.isEnabled=desactivador
     }
 
     private fun actualizarRegistros(
@@ -145,33 +155,36 @@ class PerfilActivity : AppCompatActivity() {
         apellidos: String,
         correo: String,
         usuarioId: String,
-        contrasena: String
+        contrasena: String,
+        descripcion: String
     ) {
         var foto = ""
         //Lo subimos al Storage
         if (imagenUri == null) {
             foto = autentificacion.currentUser.photoUrl.toString()
-            actualizarPerfil(nombre, apellidos, correo, usuarioId, contrasena, foto)
+            actualizarPerfil(nombre, apellidos, correo, usuarioId, contrasena, foto,descripcion)
         } else {
             //El apaño es el siguiente, la primera vez va a fallar en eliminar la foto ya que no existe esa referencia, entonces ira al addOnFailureListener
             storageReferencia.child("$usuarioId/" + autentificacion.currentUser.displayName.toString())
                 .delete()
                 .addOnSuccessListener {
-                    crearReferenciaSustituir(usuarioId, foto, nombre, apellidos, correo, contrasena)
+                    crearReferenciaSustituir(usuarioId, foto, nombre, apellidos, correo, contrasena,descripcion)
                 }
                 .addOnFailureListener {
-                    crearReferenciaSustituir(usuarioId, foto, nombre, apellidos, correo, contrasena)
+                    crearReferenciaSustituir(usuarioId, foto, nombre, apellidos, correo, contrasena,descripcion)
                 }
         }
     }
 
+    //Este metodo si no me equivoco es para que no se acumulen las fotos en el storage a la hora que se cambie la foto de perfil
     private fun crearReferenciaSustituir(
         usuarioId: String,
         foto: String,
         nombre: String,
         apellidos: String,
         correo: String,
-        contrasena: String
+        contrasena: String,
+        descripcion: String
     ) {
         //Aqui creo la subcarpeta de la referencia
         var foto1 = foto
@@ -181,7 +194,7 @@ class PerfilActivity : AppCompatActivity() {
             //Si se sube bien al Storage, Creo el link con downloadURL
             folder.downloadUrl.addOnSuccessListener { urlImagen ->
                 foto1 = urlImagen.toString()
-                actualizarPerfil(nombre, apellidos, correo, usuarioId, contrasena, foto1)
+                actualizarPerfil(nombre, apellidos, correo, usuarioId, contrasena, foto1,descripcion)
             }
         }
     }
@@ -192,7 +205,8 @@ class PerfilActivity : AppCompatActivity() {
         correo: String,
         usuarioId: String,
         contrasena: String,
-        foto: String
+        foto: String,
+        descripcion: String
     ) {
         //Meterlos en un objeto
         val usuario: Usuario = Usuario(
@@ -201,7 +215,8 @@ class PerfilActivity : AppCompatActivity() {
             correo,
             usuarioId,
             contrasena,
-            foto
+            foto,
+            descripcion
         )
         baseDatos.collection("Usuarios").document(campoNombreIdTextoPerfil).set(usuario)
             .addOnSuccessListener {

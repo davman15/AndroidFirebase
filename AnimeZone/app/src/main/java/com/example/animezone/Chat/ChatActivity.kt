@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.animezone.Clase.Usuario
+import com.example.animezone.Perfil.PerfilActivity
 import com.example.animezone.Perfil.PerfilAjenoActivity
 import com.example.animezone.Publicaciones.PublicacionAdapter
 import com.example.animezone.R
@@ -25,6 +26,7 @@ class ChatActivity : AppCompatActivity() {
     private var usuario = ""
     private var baseDatos = Firebase.firestore
     private var otroUsuario = ""
+    private var autentificacion = Firebase.auth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +54,12 @@ class ChatActivity : AppCompatActivity() {
         perfilChat_cv.setOnClickListener {
             var nombreUsuario = nombreOtroUsuarioChat.text.toString()
             val intent = Intent(this, PerfilAjenoActivity::class.java)
+            val intentoPropio = Intent(this, PerfilActivity::class.java)
             intent.putExtra("UsuarioChat", nombreUsuario)
-            startActivity(intent)
+            if (nombreUsuario == autentificacion.currentUser.displayName)
+                startActivity(intentoPropio)
+            else
+                startActivity(intent)
         }
 
         enviarMensaje_btn.setOnClickListener {
@@ -65,13 +71,22 @@ class ChatActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 val usuarioObjeto = it.toObject<Usuario>()
                 var urlImagen = usuarioObjeto?.imagen.toString()
-                nombreOtroUsuarioChat.setText(usuarioObjeto?.usuarioId.toString())
-
-                Glide.with(this)
-                    .load(urlImagen)
-                    .fitCenter()
-                    .into(imagenPerfilAjenoChat)
-
+                if (usuarioObjeto?.usuarioId.toString() == "null") {
+                    perfilChat_cv.isClickable = false
+                    urlImagen =
+                        "https://firebasestorage.googleapis.com/v0/b/animezone-82466.appspot.com/o/ImagenPerfilPorDefecto%2Fsinperfil.png?alt=media&token=79062551-4c24-45d7-9243-21030e6755b9"
+                    nombreOtroUsuarioChat.setText("No disponible")
+                    Glide.with(this)
+                        .load(urlImagen)
+                        .fitCenter()
+                        .into(imagenPerfilAjenoChat)
+                } else {
+                    nombreOtroUsuarioChat.setText(usuarioObjeto?.usuarioId.toString())
+                    Glide.with(this)
+                        .load(urlImagen)
+                        .fitCenter()
+                        .into(imagenPerfilAjenoChat)
+                }
                 cargarActualizarChat()
             }
     }
@@ -106,7 +121,8 @@ class ChatActivity : AppCompatActivity() {
                 from = usuario
             )
             //Utilizo este update para que cuando alguien hable a otra persona se le ponga este chat en primer lugar de su lista de chats
-            baseDatos.collection("Usuarios").document(nombreOtroUsuarioChat.text.toString()).collection("chats")
+            baseDatos.collection("Usuarios").document(nombreOtroUsuarioChat.text.toString())
+                .collection("chats")
                 .document(chat_id).update("fechaChat", Date()).addOnSuccessListener {
                 }
             baseDatos.collection("chats").document(chat_id).collection("Mensajes").document()

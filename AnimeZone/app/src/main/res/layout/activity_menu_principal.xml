@@ -184,7 +184,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginBottom="15dp"
                             android:gravity="center"
-                            android:text="Buscador"
+                            android:text="Buscar"
                             android:textColor="#FFFFFF"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -204,7 +204,7 @@
                     <LinearLayout
                         android:clickable="true"
                         android:foreground="?android:attr/selectableItemBackground"
-                        android:id="@+id/cerrarSesion"
+                        android:id="@+id/ver_Seguidores"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -213,14 +213,14 @@
                         <ImageView
                             android:layout_width="114dp"
                             android:layout_height="110dp"
-                            android:src="@drawable/fondoanime"></ImageView>
+                            android:src="@drawable/seguidores_ic"></ImageView>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginBottom="15dp"
                             android:gravity="center"
-                            android:text="Cerrar Sesión"
+                            android:text="Mis Seguidores"
                             android:textColor="#FFFFFF"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -239,24 +239,25 @@
                     android:foreground="?android:attr/selectableItemBackground">
 
                     <LinearLayout
-                        android:clickable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
+                        android:id="@+id/listaPublicacionesFavoritas"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
                         android:gravity="center"
                         android:orientation="vertical">
 
                         <ImageView
                             android:layout_width="114dp"
                             android:layout_height="110dp"
-                            android:src="@drawable/fondoanime"></ImageView>
+                            android:src="@drawable/favorito_ic"></ImageView>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginBottom="15dp"
                             android:gravity="center"
-                            android:text="Lista Publicaciones"
+                            android:text="Favoritos"
                             android:textColor="#FFFFFF"
                             android:textSize="16sp" />
                     </LinearLayout>
