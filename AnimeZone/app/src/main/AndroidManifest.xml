@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.animezone">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_animezone"
@@ -9,8 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".PublicacionesFavoritas.PublicacionesFavoritasActivity"></activity>
-        <activity android:name=".PublicacionesSeguidos.PublicacionesSeguidosActivity" />
+        <activity android:name=".TusPublicaciones.TusPublicacionesActivity"></activity>
+        <activity android:name=".Wallpapers.WallpaperActivity" />
+        <activity android:name=".Notificaciones.NotificacionesActivity" />
+        <activity android:name=".PublicacionesFavoritas.PublicacionesFavoritasActivity" />
         <activity android:name=".Seguidores.SeguidoresActivity" />
         <activity android:name=".Buscador.BuscadorActivity" />
         <activity android:name=".Configuracion.ConfiguracionActivity" />

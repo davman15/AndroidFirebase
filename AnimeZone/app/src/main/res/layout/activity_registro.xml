@@ -7,6 +7,31 @@
     android:background="#202732"
     tools:context=".InicioSesion.RegistroActivity">
 
+    <ProgressBar
+        android:background="@drawable/estilo_progressbar"
+        android:id="@+id/registro_circulo1"
+        android:visibility="invisible"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:rotation="180"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:visibility="invisible"
+        android:background="@drawable/estilo_progressbar"
+        android:id="@+id/registro_circulo2"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/contrasena_texto"
         android:layout_width="match_parent"

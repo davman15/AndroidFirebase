@@ -3,11 +3,10 @@ package com.example.animezone.Chat
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.text.Html
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.animezone.ProgressBar.CargandoDialog
 import com.example.animezone.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
@@ -24,38 +23,29 @@ class ListaChatsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_chats)
+        listaChats_circulo1.visibility= View.VISIBLE
+        listaChats_circulo2.visibility= View.VISIBLE
         //Aqui recibo la información si el usuario quiere chatear con otro usuario
         var usuarioChat=intent.getStringExtra("UsuarioChat").toString()
 
         //De tal forma si quiere hablar con alguien se rellena el buscador con el contacto que queria y si no pues el texto sera null
-        if(usuarioChat=="null"){
+        if(usuarioChat=="null")
             nuevoChat_tx.setText("")
-        }
-        else{
+        else
             nuevoChat_tx.setText(usuarioChat)
-        }
 
-
-        if (usuarioBusqueda.isNotEmpty()) {
+        if (usuarioBusqueda.isNotEmpty())
             iniciarBusqueda()
-        }
+
     }
 
     private fun iniciarBusqueda() {
         buscarChat.setOnClickListener {
-            if (nuevoChat_tx.text.toString() == "") {
+            if (nuevoChat_tx.text.toString() == "")
                 negarChat()
-            } else {
+            else
                 nuevoChat()
-            }
         }
-
-        //Enseñar ProgressBar
-        val cargando = CargandoDialog(this)
-        cargando.empezarCarga()
-        val handler = Handler()
-        handler.postDelayed({ cargando.cancelable() }, 2600)
-
         listaChatsRecyclerView.layoutManager = LinearLayoutManager(this)
         listaChatsRecyclerView.adapter = ChatAdapter { chat ->
             chatSeleccionado(chat)
@@ -66,6 +56,8 @@ class ListaChatsActivity : AppCompatActivity() {
             .addOnSuccessListener { chats ->
                 val listaChats = chats.toObjects(Chat::class.java)
                 (listaChatsRecyclerView.adapter as ChatAdapter).setData(listaChats)
+                listaChats_circulo1.visibility= View.INVISIBLE
+                listaChats_circulo2.visibility= View.INVISIBLE
             }
 
         //Va a estar a la espera cuando se creen nuevos chats
@@ -75,6 +67,8 @@ class ListaChatsActivity : AppCompatActivity() {
                     chats?.let {
                         val listaChats = chats.toObjects(Chat::class.java)
                         (listaChatsRecyclerView.adapter as ChatAdapter).setData(listaChats)
+                        listaChats_circulo1.visibility= View.INVISIBLE
+                        listaChats_circulo2.visibility= View.INVISIBLE
                     }
                 }
             }
@@ -99,8 +93,7 @@ class ListaChatsActivity : AppCompatActivity() {
 
     //Para crear un nuevo chat
     private fun nuevoChat() {
-        val chatID =
-            autentificacion.currentUser.displayName + "-" + nuevoChat_tx.text.toString()
+        val chatID = autentificacion.currentUser.displayName + "-" + nuevoChat_tx.text.toString()
         val otroUsuario = nuevoChat_tx.text.toString()
         val intent = Intent(this, ChatActivity::class.java)
 
@@ -116,12 +109,12 @@ class ListaChatsActivity : AppCompatActivity() {
                             if (!chat1.exists())
                                 crearChat(otroUsuario, chatID, intent)
                             else if (chat1.exists()) {
-                                val chatID =
-                                    nuevoChat_tx.text.toString() + "-" + autentificacion.currentUser.displayName
-                                crearChat2(otroUsuario, chatID, intent)
+                                val chatID = nuevoChat_tx.text.toString() + "-" + autentificacion.currentUser.displayName
+                                crearChat(otroUsuario, chatID, intent)
                             }
                         }
-                } else {
+                }
+                else {
                     negarChat()
                 }
             }
@@ -150,31 +143,6 @@ class ListaChatsActivity : AppCompatActivity() {
         intent.putExtra("otroUsuario", otroUsuario)
         startActivity(intent)
     }
-
-    private fun crearChat2(otroUsuario: String, chatID: String, intent: Intent) {
-        //Creo una lista donde pongo el usuario
-        val usuarios = listOf(usuarioBusqueda, otroUsuario)
-
-        //Y lo pongo en el chat
-        val chat = Chat(
-            id = chatID,
-            nombre = "$otroUsuario",
-            usuarios = usuarios,
-            fechaChat = Date()
-        )
-
-        baseDatos.collection("chats").document(chatID).set(chat)
-        baseDatos.collection("Usuarios").document(usuarioBusqueda).collection("chats")
-            .document(chatID).set(chat)
-        baseDatos.collection("Usuarios").document(otroUsuario).collection("chats")
-            .document(chatID).set(chat)
-        //Estos datos del chat los paso de esta forma al activity que yo quiera
-        intent.putExtra("chatId", chatID)
-        intent.putExtra("usuario", usuarioBusqueda)
-        intent.putExtra("otroUsuario", otroUsuario)
-        startActivity(intent)
-    }
-
 
     private fun negarChat() {
         AlertDialog.Builder(this).apply {

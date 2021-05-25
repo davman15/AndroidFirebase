@@ -2,15 +2,15 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/AppTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fadeScrollbars="false"
-    android:theme="@style/AppTheme">
+    tools:context=".Notificaciones.NotificacionesActivity">
 
     <ProgressBar
+        android:elevation="8dp"
+        android:id="@+id/notificaciones_circulo2"
+        android:visibility="invisible"
         android:background="@drawable/estilo_progressbar"
-        android:id="@+id/progressBar3"
         style="?android:attr/progressBarStyle"
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -19,9 +19,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <ProgressBar
+        android:elevation="8dp"
+        android:id="@+id/notificaciones_circulo1"
+        android:visibility="invisible"
         android:background="@drawable/estilo_progressbar"
-        android:id="@+id/progressBar2"
         style="?android:attr/progressBarStyle"
         android:layout_width="45dp"
         android:layout_height="45dp"
@@ -30,19 +33,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cargando"
-        android:textColor="@color/blanco"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listaNotificaciones_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar3"
-        app:layout_constraintVertical_bias="0.069" />
+        tools:listitem="@layout/notificaciones_card" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

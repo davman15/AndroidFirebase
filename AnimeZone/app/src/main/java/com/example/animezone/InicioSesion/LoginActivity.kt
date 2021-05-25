@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.example.animezone.MenuPrincipalActivity
 import com.example.animezone.R
@@ -22,6 +23,8 @@ class LoginActivity : AppCompatActivity() {
 
         //Si quiere iniciar Sesion
         login_btn.setOnClickListener {
+            circulo_iniciarSesion2.visibility= View.VISIBLE
+            circulo_iniciarSesion1.visibility= View.VISIBLE
             val email = correo_texto1.text.toString().trim()
             val password = contrasena_texto1.text.toString().trim()
 
@@ -38,9 +41,13 @@ class LoginActivity : AppCompatActivity() {
             autentificacion.signInWithEmailAndPassword(email, password)
                 //Si va bien lo mandare al activity de entrada a la aplicacion
                 .addOnSuccessListener {
+                    circulo_iniciarSesion2.visibility= View.INVISIBLE
+                    circulo_iniciarSesion1.visibility= View.INVISIBLE
                     iniciarSesion()
                 }
                 .addOnFailureListener {
+                    circulo_iniciarSesion2.visibility= View.INVISIBLE
+                    circulo_iniciarSesion1.visibility= View.INVISIBLE
                     AlertDialog.Builder(this).apply {
                         setTitle("Inicio Erróneo")
                         setMessage("Los campos no están correctamente")

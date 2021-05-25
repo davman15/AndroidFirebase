@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="20dp">
+    android:layout_marginBottom="5dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -14,7 +14,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="10dp"
         app:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +37,7 @@
             <ImageView
 
                 android:id="@+id/imagenPublicacionFavorito"
-                android:layout_width="335dp"
+                android:layout_width="378dp"
                 android:layout_height="270dp"
                 android:layout_marginTop="10dp"
                 android:scaleType="fitXY"
@@ -81,15 +80,16 @@
 
             <TextView
                 android:id="@+id/descripcionFavorito_tv"
-                android:layout_width="334dp"
-                android:layout_height="56dp"
+                android:layout_width="348dp"
+                android:layout_height="66dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="16dp"
                 android:text="Aqui va mi interesante descripción "
                 android:textColor="@color/blanco"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imagenPublicacionFavorito" />
 
@@ -97,16 +97,14 @@
                 android:id="@+id/tituloFavorito_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginTop="16dp"
                 android:text="Titulo de publicacion"
                 android:textColor="@color/blanco"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.064"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imagenPerfilFavorito" />
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

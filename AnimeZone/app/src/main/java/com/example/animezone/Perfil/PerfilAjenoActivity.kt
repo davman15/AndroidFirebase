@@ -3,18 +3,18 @@ package com.example.animezone.Perfil
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
 import com.bumptech.glide.Glide
-import com.example.animezone.Chat.ChatActivity
 import com.example.animezone.Chat.ListaChatsActivity
 import com.example.animezone.Clase.Seguidor
-import com.example.animezone.Clase.Usuario
+import com.example.animezone.Notificaciones.Notificacion
 import com.example.animezone.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_perfil.*
 import kotlinx.android.synthetic.main.activity_perfil_ajeno.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PerfilAjenoActivity : AppCompatActivity() {
     private val autentificacion = Firebase.auth
@@ -25,6 +25,8 @@ class PerfilAjenoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil_ajeno)
+        perfilajeno_circulo1.visibility= View.VISIBLE
+        perfilajeno_circulo2.visibility= View.VISIBLE
         /*Aqui recibe informacion desde la lista de Publicaciones*/
         var usuarioNombre = intent.getStringExtra("UsuarioInfo").toString()
         //Si no recibe informacion por la lista de Publicaciones
@@ -42,15 +44,19 @@ class PerfilAjenoActivity : AppCompatActivity() {
                     correoPerfilAjeno_tx.setText(it.getString("correo").toString())
                     nicknamePerfilAjeno_tx.setText(it.getString("usuarioId").toString())
                     descripcionPerfilAjeno_tx.setText(it.getString("descripcion").toString())
-                    if (apellidosPerfilAjeno_tx.text.toString() == "null") {
+                    if (apellidosPerfilAjeno_tx.text.toString() == "null")
                         apellidosPerfilAjeno_tx.setText("")
-                    }
+
+                    if (descripcionPerfilAjeno_tx.text.toString() == "null")
+                        descripcionPerfilAjeno_tx.setText("")
 
                     var urlImagen = it.getString("imagen").toString()
                     Glide.with(this)
                         .load(urlImagen)
                         .fitCenter()
                         .into(imagenPerfilAjeno)
+                    perfilajeno_circulo1.visibility= View.INVISIBLE
+                    perfilajeno_circulo2.visibility= View.INVISIBLE
                 }
         } else {
             //Si recibe información pues será rellenado de la lista de publicaciones
@@ -73,22 +79,38 @@ class PerfilAjenoActivity : AppCompatActivity() {
             if (seguir_btn.text.toString() == "Seguir") {
                 seguir_btn.setText("Seguido")
                 val seguidor = Seguidor(
-                    autentificacion.currentUser.displayName,
-                    autentificacion.currentUser.photoUrl.toString()
+                    autentificacion.currentUser.displayName
                 )
                 coleccionUsuarios.document(nicknamePerfilAjeno_tx.text.toString())
                     .collection("Seguidores").document(seguidor.usuarioId.toString()).set(seguidor)
                     .addOnSuccessListener {
+                        enviarNotificacion()
                     }
             } else {
                 seguir_btn.setText("Seguir")
                 baseDatos.collection("Usuarios").document(nicknamePerfilAjeno_tx.text.toString())
                     .collection("Seguidores").document(autentificacion.currentUser.displayName)
-                    .delete().addOnSuccessListener {
-
-                    }
+                    .delete()
             }
         }
+    }
+
+    private fun enviarNotificacion() {
+        var fechaId = ""
+        val referenciaUsuarios = baseDatos.collection("Usuarios")
+        val fechaFormateada = SimpleDateFormat("dd-M-yyyy hh:mm:ss")
+        val notificacion = Notificacion(
+            usuarioId = autentificacion.currentUser.displayName,
+            mensaje = " te ha empezado a seguir.",
+            fecha = Date()
+        )
+        fechaId = fechaFormateada.format(notificacion.fecha)
+        referenciaUsuarios.document(nicknamePerfilAjeno_tx.text.toString()).collection("Notificaciones")
+            .document(autentificacion.currentUser.displayName + "-" + fechaId)
+            .set(notificacion).addOnSuccessListener {
+                referenciaUsuarios.document(nicknamePerfilAjeno_tx.text.toString()).collection("Notificaciones No Leidas")
+                    .document(autentificacion.currentUser.displayName + "-" + fechaId).set(notificacion)
+            }
     }
 
     private fun seguir_dejar_Seguir() {
@@ -96,14 +118,12 @@ class PerfilAjenoActivity : AppCompatActivity() {
             .collection("Seguidores").document(autentificacion.currentUser.displayName)
             .get()
             .addOnSuccessListener { esSeguidor ->
-                if (esSeguidor.exists()) {
+                if (esSeguidor.exists())
                     seguir_btn.setText("Seguido")
-                } else {
+                else
                     seguir_btn.setText("Seguir")
-                }
             }
     }
-
 
     private fun mostrarDePublicaciones(usuarioNombre: String?) {
         nombre_imagenPerfilAjeno.setText(usuarioNombre)
@@ -115,15 +135,19 @@ class PerfilAjenoActivity : AppCompatActivity() {
                 correoPerfilAjeno_tx.setText(it.getString("correo").toString())
                 nicknamePerfilAjeno_tx.setText(it.getString("usuarioId").toString())
                 descripcionPerfilAjeno_tx.setText(it.getString("descripcion").toString())
-                if (apellidosPerfilAjeno_tx.text.toString() == "null") {
+                if (apellidosPerfilAjeno_tx.text.toString() == "null")
                     apellidosPerfilAjeno_tx.setText("")
-                }
+
+                if (descripcionPerfilAjeno_tx.text.toString() == "null")
+                    descripcionPerfilAjeno_tx.setText("")
 
                 var urlImagen = it.getString("imagen").toString()
                 Glide.with(this)
                     .load(urlImagen)
                     .fitCenter()
                     .into(imagenPerfilAjeno)
+                perfilajeno_circulo1.visibility= View.INVISIBLE
+                perfilajeno_circulo2.visibility= View.INVISIBLE
             }
     }
 }

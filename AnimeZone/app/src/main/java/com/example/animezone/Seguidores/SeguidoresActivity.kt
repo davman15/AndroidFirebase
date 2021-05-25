@@ -3,11 +3,10 @@ package com.example.animezone.Seguidores
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.animezone.Clase.Usuario
 import com.example.animezone.Perfil.PerfilAjenoActivity
-import com.example.animezone.ProgressBar.CargandoDialog
 import com.example.animezone.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -21,31 +20,30 @@ class SeguidoresActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_seguidores)
-        //Enseñar ProgressBar
-        val cargando = CargandoDialog(this)
-        cargando.empezarCarga()
-        val handler = Handler()
-        handler.postDelayed({ cargando.cancelable() }, 1900)
+        listaSeguidores_circulo2.visibility= View.VISIBLE
+        listaSeguidores_circulo1.visibility= View.VISIBLE
+
         listaSeguidores.layoutManager = LinearLayoutManager(this)
 
         listaSeguidores.adapter = SeguidoresAdapter { usuario ->
             seleccionarSeguidor(usuario)
         }
 
-
         baseDatos.collection("Usuarios").document(autentificacion.currentUser.displayName)
             .collection("Seguidores")
             .addSnapshotListener { value, error ->
                 val listaUsuarios = value?.toObjects(Usuario::class.java)
                 if (listaUsuarios != null) {
-                    (listaSeguidores.adapter as SeguidoresAdapter).listaActualizada(listaUsuarios)
+                  (listaSeguidores.adapter as SeguidoresAdapter).listaActualizada(listaUsuarios)
+                    listaSeguidores_circulo2.visibility= View.INVISIBLE
+                    listaSeguidores_circulo1.visibility= View.INVISIBLE
                 }
             }
     }
 
     private fun seleccionarSeguidor(usuario: Usuario) {
         val intent = Intent(this, PerfilAjenoActivity::class.java)
-        intent.putExtra("UsuarioInfo", usuario.usuarioId.toString())
+        intent.putExtra("UsuarioChat", usuario.usuarioId.toString())
         startActivity(intent)
     }
 }

@@ -7,6 +7,33 @@
     android:background="@drawable/fondo_perfil_ajeno"
     tools:context=".Perfil.PerfilAjenoActivity">
 
+    <ProgressBar
+        android:elevation="6dp"
+        android:id="@+id/perfilajeno_circulo1"
+        android:visibility="invisible"
+        android:background="@drawable/estilo_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:rotation="180"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:elevation="6dp"
+        android:id="@+id/perfilajeno_circulo2"
+        android:visibility="invisible"
+        android:background="@drawable/estilo_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/correoPerfilAjeno_tx"
         android:layout_width="wrap_content"

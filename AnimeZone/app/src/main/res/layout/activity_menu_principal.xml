@@ -61,6 +61,21 @@
                     app:srcCompat="@drawable/animezone" />
 
                 <ImageView
+                    android:visibility="invisible"
+                    android:id="@+id/icono_verde_Menu"
+                    android:layout_width="18dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="23dp"
+                    android:layout_marginRight="23dp"
+                    android:layout_marginBottom="30dp"
+                    android:src="@drawable/notificaciones_verde_ic"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imagenPerfilMenu"
+                    app:layout_constraintTop_toBottomOf="@+id/imagenPerfilMenu"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <ImageView
                     android:id="@+id/abrirMenu"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -347,6 +362,7 @@
                     android:foreground="?android:attr/selectableItemBackground">
 
                     <LinearLayout
+                        android:id="@+id/wallpapers_menu"
                         android:clickable="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:layout_width="match_parent"
@@ -357,13 +373,15 @@
                         <ImageView
                             android:layout_width="114dp"
                             android:layout_height="110dp"
-                            android:src="@drawable/fondoanime"></ImageView>
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/fondo_icono"></ImageView>
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginBottom="15dp"
                             android:gravity="center"
-                            android:text="Lista Publicaciones"
+                            android:text="Wallpapers"
                             android:textColor="#FFFFFF"
                             android:textSize="16sp" />
                     </LinearLayout>

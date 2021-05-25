@@ -4,14 +4,11 @@ import android.content.DialogInterface
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.text.Html
 import android.text.TextUtils.isEmpty
-import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.example.animezone.Clase.Usuario
-import com.example.animezone.ProgressBar.CargandoDialog
-import com.example.animezone.Publicaciones.Publicacion
 import com.example.animezone.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
@@ -27,6 +24,8 @@ class RegistroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registro)
         registrarse.setOnClickListener {
+            registro_circulo1.visibility= View.VISIBLE
+            registro_circulo2.visibility= View.VISIBLE
             val nombre = nombre_texto.text.toString().trim()
             val email = email_texto.text.toString().trim()
             val usuarioId = nickname_texto.text.toString().trim()
@@ -57,6 +56,8 @@ class RegistroActivity : AppCompatActivity() {
             basedeDatos.collection("Usuarios").document(usuarioId).get()
                 .addOnSuccessListener {
                     if (it.exists()) {
+                        registro_circulo1.visibility= View.INVISIBLE
+                        registro_circulo2.visibility= View.INVISIBLE
                         AlertDialog.Builder(this).apply {
                             setTitle("Nickname en uso")
                             setMessage("Escoja un nickname más original y único")
@@ -66,15 +67,12 @@ class RegistroActivity : AppCompatActivity() {
                         nickname_texto.requestFocus()
                         nickname_texto.setError("Inserte otro nickname")
                     } else {
-                        //Enseñar ProgressBar
-                        val cargando = CargandoDialog(this)
-                        cargando.empezarCarga()
-                        val handler = Handler()
-                        handler.postDelayed({ cargando.cancelable() }, 1400)
                         //Si todos los campos son rellenados correctamente
                         auth.createUserWithEmailAndPassword(email, contrasena)
                             .addOnCompleteListener {
                                 if (!it.isSuccessful) {
+                                    registro_circulo1.visibility= View.INVISIBLE
+                                    registro_circulo2.visibility= View.INVISIBLE
                                     AlertDialog.Builder(this).apply {
                                         setTitle("Registro Fallido")
                                         setMessage("Por favor, inténtalo de nuevo")
@@ -98,6 +96,8 @@ class RegistroActivity : AppCompatActivity() {
                                     displayName = usuarioId
                                     photoUri = Uri.parse(foto)
                                 }
+                                registro_circulo1.visibility= View.INVISIBLE
+                                registro_circulo2.visibility= View.INVISIBLE
                                 auth.currentUser.updateProfile(cambiarNick)
                                 AlertDialog.Builder(this).apply {
                                     setTitle("Cuenta Creada")

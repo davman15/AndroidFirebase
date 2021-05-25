@@ -1,19 +1,15 @@
 package com.example.animezone.Perfil
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.text.Html
 import android.text.TextUtils.isEmpty
+import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.example.animezone.Clase.Usuario
-import com.example.animezone.ProgressBar.CargandoDialog
 import com.example.animezone.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
@@ -45,18 +41,14 @@ class PerfilActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil)
-        //Enseñar ProgressBar
-        val cargando = CargandoDialog(this)
-        cargando.empezarCarga()
-        val handler = Handler()
-        handler.postDelayed({ cargando.cancelable() }, 1900)
-        nombre_ImagenPerfil.setText(autentificacion.currentUser.displayName)
-
+        circulo1.visibility= View.VISIBLE
+        circulo2.visibility= View.VISIBLE
         //Enseñar Campos
         coleccionUsuarios.document(autentificacion.currentUser.displayName).get()
             .addOnSuccessListener {
                 //Rellenar campos
-                nombrePerfil_texto.setText(it.getString("nombreUsuario").toString())
+                nombre_ImagenPerfil.text = it.getString("nombreUsuario").toString()
+                nombrePerfil_texto.setText(it.getString("usuarioId").toString())
                 apellidosPerfil_texto.setText(it.getString("apellidos").toString())
                 correoPerfil_texto.setText(it.getString("correo").toString())
                 nicknamePerfil_texto.setText(it.getString("usuarioId").toString())
@@ -65,12 +57,17 @@ class PerfilActivity : AppCompatActivity() {
                 if (apellidosPerfil_texto.text.toString() == "null") {
                     apellidosPerfil_texto.setText("")
                 }
+                if (descripcion_texto.text.toString() == "null") {
+                    descripcion_texto.setText("")
+                }
 
                 var urlImagen = it.getString("imagen").toString()
                 Glide.with(this)
                     .load(urlImagen)
                     .fitCenter()
                     .into(imagenPerfil)
+                circulo1.visibility= View.INVISIBLE
+                circulo2.visibility= View.INVISIBLE
             }
 
         //Toast.makeText(this, "ola", Toast.LENGTH_SHORT).show()
@@ -85,6 +82,8 @@ class PerfilActivity : AppCompatActivity() {
                 camposPerfil(true)
                 editarPerfil_btn.setText("Guardar Cambios")
             } else {
+                circulo1.visibility= View.VISIBLE
+                circulo2.visibility= View.VISIBLE
                 imagenPerfil.isClickable = false
                 //Coger los campos
                 campoNombreTextoPerfil = nombrePerfil_texto.text.toString()
@@ -218,6 +217,8 @@ class PerfilActivity : AppCompatActivity() {
             foto,
             descripcion
         )
+
+        nombre_ImagenPerfil.setText(autentificacion.currentUser.displayName)
         baseDatos.collection("Usuarios").document(campoNombreIdTextoPerfil).set(usuario)
             .addOnSuccessListener {
                 val cambiarNick = userProfileChangeRequest {
@@ -225,12 +226,9 @@ class PerfilActivity : AppCompatActivity() {
                     photoUri = Uri.parse(foto)
                 }
                 autentificacion.currentUser.updateProfile(cambiarNick)
-                AlertDialog.Builder(this).apply {
-                    setTitle("Perfil Actualizado")
-                    setMessage("Los cambios fueron realizados correctamente")
-                    setPositiveButton(Html.fromHtml("<font color='#FFFFFF'>Aceptar</font>")) { _: DialogInterface, _: Int ->
-                    }
-                }.show()
+                circulo1.visibility= View.INVISIBLE
+                circulo2.visibility= View.INVISIBLE
+                Toast.makeText(this, "Perfil Actualizado Correctamente", Toast.LENGTH_SHORT).show()
             }
     }
 

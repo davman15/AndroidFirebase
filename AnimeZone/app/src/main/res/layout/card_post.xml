@@ -52,16 +52,14 @@
 
             <TextView
                 android:id="@+id/descripcion_tv"
-                android:layout_width="363dp"
-                android:layout_height="58dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
+                android:layout_width="348dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginTop="16dp"
                 android:text="Aqui va mi interesante descripción "
                 android:textColor="@color/blanco"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.122"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imagenPublicacion" />
 
@@ -86,7 +84,7 @@
                 android:id="@+id/anadirFavorito_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginRight="12dp"
                 android:layout_marginBottom="16dp"
@@ -104,8 +102,9 @@
                 android:id="@+id/like_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/boton_megusta"
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
@@ -122,8 +121,8 @@
                 android:id="@+id/megustaContador"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginTop="29dp"
                 android:layout_marginBottom="20dp"
                 android:text="0 Me gusta"
@@ -135,26 +134,25 @@
 
             <ImageView
                 android:id="@+id/imagenPublicacion"
-                android:layout_width="335dp"
-                android:layout_height="270dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="378dp"
+                android:layout_height="265dp"
+                android:layout_marginTop="16dp"
                 android:scaleType="fitXY"
+                android:src="@drawable/vertical"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.363"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/titulo_tv"
-                tools:srcCompat="@tools:sample/avatars" />
+                app:layout_constraintTop_toBottomOf="@+id/titulo_tv" />
 
             <TextView
                 android:id="@+id/titulo_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginTop="16dp"
-                android:text="Titulo de publicacion"
+                android:text="Titulo de publicacion "
                 android:textColor="@color/blanco"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.064"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imagenPerfilMenu" />
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.chat_item.view.*
+import java.text.SimpleDateFormat
 
 class ChatAdapter(val chatClick: (Chat) -> Unit) : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
     var chats: List<Chat> = emptyList()
@@ -35,7 +36,6 @@ class ChatAdapter(val chatClick: (Chat) -> Unit) : RecyclerView.Adapter<ChatAdap
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
         var usuarioActual = autentificacion.currentUser.displayName
         val conversaciones = chats[position]
-
         //Aqui se gestiona para que en el chat se vea las mismas conversaciones pero el perfil cambiado
         if (conversaciones.usuarios.first().toString() == usuarioActual) {
             holder.itemView.chatNombre.text = conversaciones.usuarios.last()
@@ -45,7 +45,6 @@ class ChatAdapter(val chatClick: (Chat) -> Unit) : RecyclerView.Adapter<ChatAdap
                 .addOnSuccessListener {
                     var urlImagen = it.getString("imagen").toString()
                     comprobarImagen(urlImagen, holder)
-
                 }
         } else if (conversaciones.usuarios.last().toString() == usuarioActual) {
             holder.itemView.chatNombre.text = conversaciones.usuarios.first()

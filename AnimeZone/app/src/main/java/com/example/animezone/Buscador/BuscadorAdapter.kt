@@ -22,7 +22,6 @@ class BuscadorAdapter(val usuarioClick: (Usuario) -> Unit) :
         usuariosLista = lista
         if (caracterBuscador.isEmpty()) {
             (usuariosLista as MutableList<Usuario>).clear()
-
             (usuariosLista as MutableList<Usuario>).addAll(originalUsuarios!!)
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

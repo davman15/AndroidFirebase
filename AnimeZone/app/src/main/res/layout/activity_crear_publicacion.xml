@@ -6,6 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".Publicaciones.CrearPublicacionActivity">
 
+    <ProgressBar
+        android:elevation="6dp"
+        android:id="@+id/crearPublicacion_circulo1"
+        android:visibility="invisible"
+        android:background="@drawable/estilo_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:rotation="180"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:elevation="6dp"
+        android:id="@+id/crearPublicacion_circulo2"
+        android:visibility="invisible"
+        android:background="@drawable/estilo_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/descripcion_publicacion"
         android:layout_width="323dp"
@@ -15,6 +42,7 @@
         android:gravity="start|top"
         android:hint="Escribe una descripción"
         android:inputType="textMultiLine"
+        android:backgroundTint="@color/blanco"
         android:textColor="@color/blanco"
         android:textColorHighlight="@color/blanco"
         android:textColorHint="#F8E7E7"
@@ -62,6 +90,7 @@
         app:layout_constraintTop_toBottomOf="@+id/titulo_publicacion" />
 
     <EditText
+        android:backgroundTint="@color/blanco"
         android:id="@+id/titulo_publicacion"
         android:layout_width="323dp"
         android:layout_height="wrap_content"
