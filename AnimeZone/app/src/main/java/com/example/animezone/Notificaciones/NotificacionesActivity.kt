@@ -13,6 +13,7 @@ import com.example.animezone.Perfil.PerfilAjenoActivity
 import com.example.animezone.Publicaciones.ListaPublicacionesActivity
 import com.example.animezone.R
 import com.example.animezone.Seguidores.SeguidoresActivity
+import com.example.animezone.TusPublicaciones.TusPublicacionesActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -24,7 +25,7 @@ class NotificacionesActivity : AppCompatActivity() {
     private var baseDatos = Firebase.firestore
     private var mensajeSeguir="te ha empezado a seguir"
     private var mensajeChat="quiere empezar una nueva conversación contigo"
-    private var mensajeLikes="te ha dado un like en tu publicacion"
+    private var mensajeLikes="te ha dado un like en tu publicación"
     private var mensajePublicacion="Subió una nueva publicación, venga corre a ver que novedades tiene"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +67,7 @@ class NotificacionesActivity : AppCompatActivity() {
         val intent=Intent(this,ListaPublicacionesActivity::class.java)
         startActivity(intent)
     }
+
 
     private fun irSeguidor(usuario: Notificacion) {
         val intent = Intent(this, PerfilAjenoActivity::class.java)

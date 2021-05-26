@@ -1,27 +1,29 @@
 package com.example.animezone.Publicaciones
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
+import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.animezone.Notificaciones.Notificacion
 import com.example.animezone.Perfil.PerfilActivity
 import com.example.animezone.Perfil.PerfilAjenoActivity
 import com.example.animezone.R
-import com.example.animezone.TusPublicaciones.TusPublicacionesActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -70,30 +72,26 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
                 Glide.with(holder.itemView.context).load(it?.getString("imagen").toString()).fitCenter()
                     .into(holder.layout.imagenPerfilMenu)
             }
-
-        cambiarColor(genteLikes, holder.layout.like_btn)
+        likeAnimacion2(holder.layout.like_btn,R.raw.bandai_dokkan,genteLikes)
 
         //Si la gente le gusta y le da al boton
         holder.layout.like_btn.setOnClickListener {
             genteLikes = !genteLikes
-            cambiarColor(genteLikes, holder.layout.like_btn)
+            likeAnimacion(holder.layout.like_btn,R.raw.bandai_dokkan,genteLikes)
+
             //Si la gente le da like se añade el id del usuario a la lista de me gusta que tiene la publicacion
             if (genteLikes) {
                 likes.add(autentificacion.currentUser.displayName!!)
                 actualizarLikes(publicacion, likes)
                 holder.layout.megustaContador.text = "${likes.size} Me gusta"
-                holder.layout.like_btn.setBackgroundResource(R.drawable.boton_megusta)
 
                 if(holder.layout.nombrePersonatv.text.toString()!=autentificacion.currentUser.displayName)
                     enviarNotificacion(publicacion.usuarioNombre.toString())
-
 
             } else {
                 likes.remove(autentificacion.currentUser.displayName)
                 actualizarLikes(publicacion, likes)
                 holder.layout.megustaContador.text = "${likes.size} Me gusta"
-                holder.layout.like_btn.setBackgroundColor(Color.GRAY)
-                cambiarColor(genteLikes, holder.layout.like_btn)
             }
         }
 
@@ -156,13 +154,20 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
                     .document(autentificacion.currentUser.displayName)
                     .collection("Favoritos").document(publicacion.uid!!).delete()
                     .addOnSuccessListener {
-                        holder.itemView.anadirFavorito_btn.setBackgroundColor(Color.GRAY)
                         Toast.makeText(holder.itemView.context, "Eliminado de Favoritos", Toast.LENGTH_SHORT).show()
+
+                        holder.itemView.anadirFavorito_btn.animate().alpha(0f).setDuration(300)
+                            .setListener(object : AnimatorListenerAdapter() {
+                                override fun onAnimationEnd(animation: Animator?) {
+                                    holder.itemView.anadirFavorito_btn.setImageResource(R.drawable.estrella_icono)
+                                    holder.itemView.anadirFavorito_btn.alpha = 1f
+                                }
+                            })
                     }
             } else {
                 referenciaFavoritos.set(publicacion)
                     .addOnSuccessListener {
-                        holder.itemView.anadirFavorito_btn.setBackgroundResource(R.drawable.button_rounded)
+                        cambiarColorFavorito(favorito, holder.itemView.anadirFavorito_btn,R.raw.animacion_star)
                         Toast.makeText(holder.itemView.context, "Añadido a Favoritos", Toast.LENGTH_SHORT).show()
                     }
             }
@@ -170,12 +175,11 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
     }
 
 
-
     private fun existenciaFavoritos(publicacion: Publicacion, holder: ViewHolder) {
         basedeDatos.collection("Usuarios").document(autentificacion.currentUser.displayName)
             .collection("Favoritos").document(publicacion.uid!!).get().addOnSuccessListener {
                 favorito = it.exists()
-                cambiarColorFavorito(favorito, holder.itemView.anadirFavorito_btn)
+                cambiarColorFavorito2(favorito, holder.itemView.anadirFavorito_btn,R.raw.animacion_star)
             }
     }
 
@@ -190,21 +194,59 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
             startActivity(activity, intent, Bundle())
     }
 
-    private fun cambiarColor(gustado: Boolean, botonMegusta: Button) {
-        //Si le di me gusta a la publicacion tendra un color
-        if (gustado)
-            botonMegusta.setTextColor(ContextCompat.getColor(activity, R.color.blanco))
-        //Sino me gusta la publicacion tendrá color negro el boton de Me gusta
-        else
-            botonMegusta.setBackgroundColor(Color.GRAY)
+    private fun likeAnimacion(imageView: LottieAnimationView, animacion:Int, darLike:Boolean):Boolean{
+        if(darLike){
+            imageView.setAnimation(animacion)
+            imageView.playAnimation()
+        }else{
+            imageView.animate().alpha(0f).setDuration(300).setListener(object :AnimatorListenerAdapter(){
+                override fun onAnimationEnd(animation: Animator?) {
+                    imageView.setImageResource(R.drawable.imagen_like)
+                    imageView.alpha=1f
+                }
+            })
+        }
+        return darLike
     }
 
-    private fun cambiarColorFavorito(darFavorito: Boolean, botonFavorito: Button) {
+    private fun likeAnimacion2(imageView: LottieAnimationView, animacion:Int, darLike:Boolean):Boolean{
+        if(darLike){
+            imageView.setAnimation(animacion)
+            imageView.playAnimation()
+        }else{
+             imageView.setImageResource(R.drawable.imagen_like)
+        }
+        return darLike
+    }
+
+    private fun cambiarColorFavorito2(darFavorito: Boolean, botonFavorito: LottieAnimationView,animacion:Int) {
         //Si le di me gusta a la publicacion tendra un color
-        if (darFavorito)
-            botonFavorito.setBackgroundResource(R.drawable.button_rounded)
+        if (darFavorito){
+            botonFavorito.setAnimation(animacion)
+            botonFavorito.playAnimation()
+        }
         //Sino me gusta la publicacion tendrá color negro el boton de Me gusta
-        else
-            botonFavorito.setBackgroundColor(Color.GRAY)
+        else {
+            botonFavorito.setImageResource(R.drawable.estrella_icono)
+        }
+    }
+
+    private fun cambiarColorFavorito(darFavorito: Boolean, botonFavorito: LottieAnimationView,animacion:Int) {
+        //Si le di me gusta a la publicacion tendra un color
+        if (darFavorito){
+            botonFavorito.setAnimation(animacion)
+            botonFavorito.playAnimation()
+        }
+
+        //Sino me gusta la publicacion tendrá color negro el boton de Me gusta
+        else {
+            botonFavorito.animate().alpha(0f).setDuration(300)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        botonFavorito.setImageResource(R.drawable.estrella_icono)
+                        botonFavorito.alpha = 1f
+                    }
+                })
+        }
     }
 }

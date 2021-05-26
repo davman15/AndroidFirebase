@@ -80,42 +80,20 @@
                 app:layout_constraintStart_toEndOf="@+id/nombrePersonatv"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/anadirFavorito_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="12dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginBottom="16dp"
-                android:background="@color/gray"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:text="Favorito"
-                android:textColor="@color/blanco"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/descripcion_tv"
-                app:layout_constraintVertical_bias="0.0" />
 
-            <Button
-                android:id="@+id/like_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/anadirFavorito_btn"
+                android:layout_width="80dp"
+                android:layout_height="32dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
-                android:background="@drawable/boton_megusta"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:text="Me gusta"
-                android:textColor="@color/blanco"
+                android:layout_marginBottom="5dp"
+
+                android:src="@drawable/estrella_icono"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/anadirFavorito_btn"
-                app:layout_constraintHorizontal_bias="0.86"
-                app:layout_constraintStart_toEndOf="@+id/megustaContador"
-                app:layout_constraintTop_toBottomOf="@+id/descripcion_tv"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/like_btn"
+                app:layout_constraintTop_toBottomOf="@+id/descripcion_tv" />
 
             <TextView
                 android:id="@+id/megustaContador"
@@ -137,7 +115,7 @@
                 android:layout_width="378dp"
                 android:layout_height="265dp"
                 android:layout_marginTop="16dp"
-                android:scaleType="fitXY"
+                android:scaleType="fitCenter"
                 android:src="@drawable/vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -155,6 +133,19 @@
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imagenPerfilMenu" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/like_btn"
+                android:layout_width="113dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginBottom="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/anadirFavorito_btn"
+                app:layout_constraintStart_toEndOf="@+id/megustaContador"
+                app:layout_constraintTop_toBottomOf="@+id/descripcion_tv"
+                app:srcCompat="@drawable/imagen_like"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

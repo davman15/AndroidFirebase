@@ -27,7 +27,6 @@
             android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
-
                 android:id="@+id/imagenPerfilListaChat"
                 android:layout_width="48dp"
                 android:layout_height="42dp"

@@ -21,7 +21,6 @@
             android:background="@drawable/estilo_progressbar"
             android:elevation="8dp"
             android:rotation="180"
-
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

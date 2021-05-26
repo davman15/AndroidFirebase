@@ -47,6 +47,8 @@ dependencies {
     //Fotos Circulares
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    //Animaciones
+    implementation 'com.airbnb.android:lottie:3.7.0'
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
     //Glide
