@@ -47,19 +47,19 @@ class PerfilActivity : AppCompatActivity() {
         coleccionUsuarios.document(autentificacion.currentUser.displayName).get()
             .addOnSuccessListener {
                 //Rellenar campos
-                nombre_ImagenPerfil.text = it.getString("nombreUsuario").toString()
-                nombrePerfil_texto.setText(it.getString("usuarioId").toString())
+                nombre_ImagenPerfil.text = it.getString("usuarioId").toString()
+                nombrePerfil_texto.setText(it.getString("nombreUsuario").toString())
                 apellidosPerfil_texto.setText(it.getString("apellidos").toString())
                 correoPerfil_texto.setText(it.getString("correo").toString())
                 nicknamePerfil_texto.setText(it.getString("usuarioId").toString())
                 contrasenaPerfil_texto.setText(it.getString("contrasena").toString())
                 descripcion_texto.setText(it.getString("descripcion").toString())
-                if (apellidosPerfil_texto.text.toString() == "null") {
+                if (apellidosPerfil_texto.text.toString() == "null")
                     apellidosPerfil_texto.setText("")
-                }
-                if (descripcion_texto.text.toString() == "null") {
+
+                if (descripcion_texto.text.toString() == "null")
                     descripcion_texto.setText("")
-                }
+
 
                 var urlImagen = it.getString("imagen").toString()
                 Glide.with(this)

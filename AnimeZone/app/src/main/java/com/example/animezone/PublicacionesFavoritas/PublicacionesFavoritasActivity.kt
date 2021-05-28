@@ -26,6 +26,11 @@ class PublicacionesFavoritasActivity : AppCompatActivity() {
                 publicaciones.forEachIndexed { index, publicacion ->
                     publicacion.uid = value.documents[index].id
                 }
+                if(publicaciones.size<=0)
+                    notienesfavoritos_tv.visibility=View.VISIBLE
+                else
+                    notienesfavoritos_tv.visibility=View.INVISIBLE
+
                 listaPublicacionesFavoritas_rv.apply {
                     //El tamaño es fijo del recyclerView
                     setHasFixedSize(true)
@@ -36,6 +41,7 @@ class PublicacionesFavoritasActivity : AppCompatActivity() {
                         this@PublicacionesFavoritasActivity,
                         publicaciones
                     )
+
                     listaPublicacionesFavoritas_circulo1.visibility= View.INVISIBLE
                     listaPublicacionesFavoritas_circulo2.visibility= View.INVISIBLE
                 }

@@ -139,7 +139,8 @@ class CrearPublicacionActivity : AppCompatActivity() {
                     val notificacion = Notificacion(
                         usuarioId = autentificacion.currentUser.displayName,
                         mensaje = ", Subió una nueva publicación, venga corre a ver que novedades tiene",
-                        fecha = Date()
+                        fecha = Date(),
+                        id = autentificacion.currentUser.displayName+"-"+fechaFormateada.format(Date())
                     )
                     fechaId = fechaFormateada.format(notificacion.fecha)
                     referenciaUsuarios.document(seguidor.id).collection("Notificaciones")

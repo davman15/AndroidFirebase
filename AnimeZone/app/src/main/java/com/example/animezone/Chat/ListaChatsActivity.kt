@@ -52,25 +52,16 @@ class ListaChatsActivity : AppCompatActivity() {
         }
 
         val usuarioReferencia = baseDatos.collection("Usuarios").document(usuarioBusqueda)
-        usuarioReferencia.collection("chats").orderBy("fechaChat", Query.Direction.DESCENDING).get()
-            .addOnSuccessListener { chats ->
-                val listaChats = chats.toObjects(Chat::class.java)
+        usuarioReferencia.collection("chats").orderBy("fechaChat", Query.Direction.DESCENDING).addSnapshotListener { value, error ->
+                val listaChats = value!!.toObjects(Chat::class.java)
                 (listaChatsRecyclerView.adapter as ChatAdapter).setData(listaChats)
+                if(listaChats.size<=0)
+                    notieneschats_tv.visibility=View.VISIBLE
+                else
+                    notieneschats_tv.visibility=View.INVISIBLE
+
                 listaChats_circulo1.visibility= View.INVISIBLE
                 listaChats_circulo2.visibility= View.INVISIBLE
-            }
-
-        //Va a estar a la espera cuando se creen nuevos chats
-        usuarioReferencia.collection("chats").orderBy("fechaChat", Query.Direction.DESCENDING)
-            .addSnapshotListener { chats, error ->
-                if (error == null) {
-                    chats?.let {
-                        val listaChats = chats.toObjects(Chat::class.java)
-                        (listaChatsRecyclerView.adapter as ChatAdapter).setData(listaChats)
-                        listaChats_circulo1.visibility= View.INVISIBLE
-                        listaChats_circulo2.visibility= View.INVISIBLE
-                    }
-                }
             }
     }
 

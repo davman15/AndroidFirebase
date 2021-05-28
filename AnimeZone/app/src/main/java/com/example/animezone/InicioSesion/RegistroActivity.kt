@@ -31,28 +31,9 @@ class RegistroActivity : AppCompatActivity() {
             val usuarioId = nickname_texto.text.toString().trim()
             val contrasena = contrasena_texto.text.toString().trim()
             //Como un switch
-            when {
-                isEmpty(nombre) -> {
-                    nombre_texto.setError("Introduzca su nombre")
-                    nombre_texto.requestFocus()
-                    return@setOnClickListener
-                }
-                isEmpty(usuarioId) -> {
-                    nickname_texto.setError("Introduzca su nombre de usuario")
-                    nickname_texto.requestFocus()
-                    return@setOnClickListener
-                }
-                isEmpty(email) -> {
-                    email_texto.setError("Introduzca su email")
-                    email_texto.requestFocus()
-                    return@setOnClickListener
-                }
-                isEmpty(contrasena) -> {
-                    contrasena_texto.setError("Introduzca su contraseña")
-                    contrasena_texto.requestFocus()
-                    return@setOnClickListener
-                }
-            }
+            if (validarCamposRegistro(nombre, usuarioId, email, contrasena))
+                return@setOnClickListener
+
             basedeDatos.collection("Usuarios").document(usuarioId).get()
                 .addOnSuccessListener {
                     if (it.exists()) {
@@ -68,47 +49,95 @@ class RegistroActivity : AppCompatActivity() {
                         nickname_texto.setError("Inserte otro nickname")
                     } else {
                         //Si todos los campos son rellenados correctamente
-                        auth.createUserWithEmailAndPassword(email, contrasena)
-                            .addOnCompleteListener {
-                                if (!it.isSuccessful) {
-                                    registro_circulo1.visibility= View.INVISIBLE
-                                    registro_circulo2.visibility= View.INVISIBLE
-                                    AlertDialog.Builder(this).apply {
-                                        setTitle("Registro Fallido")
-                                        setMessage("Por favor, inténtalo de nuevo")
-                                        setPositiveButton(Html.fromHtml("<font color='#FFFFFF'>Aceptar</font>")) { _: DialogInterface, _: Int ->
-                                        }
-                                    }.show()
-                                }
-                            }
-                            .addOnSuccessListener {
-                                //Meto la foto directamente en la variable
-                                val foto =
-                                    "https://firebasestorage.googleapis.com/v0/b/animezone-82466.appspot.com/o/ImagenPerfilPorDefecto%2Fsinperfil.png?alt=media&token=79062551-4c24-45d7-9243-21030e6755b9"
-                                //Creo el objeto que voy a enviar a la base de datos
-                                val usuario: Usuario =
-                                    Usuario(nombre, null, email, usuarioId, contrasena, foto,"Me encanta el anime. espero que nos llevemos bien!! xD")
-                                //Creo la coleccion que va a haber en la base de datos que se va a llamar usuarios , un documento que su id va a ser el nickname, y el objeto usuario lo meto a la base de datos
-                                basedeDatos.collection("Usuarios").document(usuarioId).set(usuario)
-                                //Aqui lo que hago es si esta bien, el registro, (tuve un problema que no me cogia el displayName del que esta iniciado sesion)
-                                //Actualizo el perfil y le doy valor al displayName ya que me daba valor null
-                                val cambiarNick = userProfileChangeRequest {
-                                    displayName = usuarioId
-                                    photoUri = Uri.parse(foto)
-                                }
-                                registro_circulo1.visibility= View.INVISIBLE
-                                registro_circulo2.visibility= View.INVISIBLE
-                                auth.currentUser.updateProfile(cambiarNick)
-                                AlertDialog.Builder(this).apply {
-                                    setTitle("Cuenta Creada")
-                                    setMessage("Se ha registrado correctamente")
-                                    setPositiveButton(Html.fromHtml("<font color='#FFFFFF'>Aceptar</font>")) { _: DialogInterface, _: Int ->
-                                        finish()
-                                    }.show()
-                                }
-                            }
+                        validarCredencialesRegistro(email, contrasena, nombre, usuarioId)
                     }
                 }
         }
+    }
+
+    private fun validarCredencialesRegistro(
+        email: String,
+        contrasena: String,
+        nombre: String,
+        usuarioId: String
+    ) {
+        auth.createUserWithEmailAndPassword(email, contrasena)
+            .addOnCompleteListener {
+                if (!it.isSuccessful) {
+                    registro_circulo1.visibility = View.INVISIBLE
+                    registro_circulo2.visibility = View.INVISIBLE
+                    AlertDialog.Builder(this).apply {
+                        setTitle("Registro Fallido")
+                        setMessage("Por favor, inténtalo de nuevo")
+                        setPositiveButton(Html.fromHtml("<font color='#FFFFFF'>Aceptar</font>")) { _: DialogInterface, _: Int ->
+                        }
+                    }.show()
+                }
+            }
+            .addOnSuccessListener {
+                registrarUsuario(nombre, email, usuarioId, contrasena)
+            }
+    }
+
+    private fun registrarUsuario(
+        nombre: String,
+        email: String,
+        usuarioId: String,
+        contrasena: String
+    ) {
+        //Meto la foto directamente en la variable
+        val foto =
+            "https://firebasestorage.googleapis.com/v0/b/animezone-82466.appspot.com/o/ImagenPerfilPorDefecto%2Fsinperfil.png?alt=media&token=79062551-4c24-45d7-9243-21030e6755b9"
+        //Creo el objeto que voy a enviar a la base de datos
+        val usuario = Usuario(nombre, null, email, usuarioId, contrasena, foto, "Me encanta el anime. espero que nos llevemos bien!! xD")
+        //Creo la coleccion que va a haber en la base de datos que se va a llamar usuarios , un documento que su id va a ser el nickname, y el objeto usuario lo meto a la base de datos
+        basedeDatos.collection("Usuarios").document(usuarioId).set(usuario)
+        //Aqui lo que hago es si esta bien, el registro, (tuve un problema que no me cogia el displayName del que esta iniciado sesion)
+        //Actualizo el perfil y le doy valor al displayName ya que me daba valor null
+        val cambiarNick = userProfileChangeRequest {
+            displayName = usuarioId
+            photoUri = Uri.parse(foto)
+        }
+        registro_circulo1.visibility = View.INVISIBLE
+        registro_circulo2.visibility = View.INVISIBLE
+        auth.currentUser.updateProfile(cambiarNick)
+        AlertDialog.Builder(this).apply {
+            setTitle("Cuenta Creada")
+            setMessage("Se ha registrado correctamente")
+            setPositiveButton(Html.fromHtml("<font color='#FFFFFF'>Aceptar</font>")) { _: DialogInterface, _: Int ->
+                finish()
+            }.show()
+        }
+    }
+
+    private fun validarCamposRegistro(
+        nombre: String,
+        usuarioId: String,
+        email: String,
+        contrasena: String
+    ): Boolean {
+        when {
+            isEmpty(nombre) -> {
+                nombre_texto.setError("Introduzca su nombre")
+                nombre_texto.requestFocus()
+                return true
+            }
+            isEmpty(usuarioId) -> {
+                nickname_texto.setError("Introduzca su nombre de usuario")
+                nickname_texto.requestFocus()
+                return true
+            }
+            isEmpty(email) -> {
+                email_texto.setError("Introduzca su email")
+                email_texto.requestFocus()
+                return true
+            }
+            isEmpty(contrasena) -> {
+                contrasena_texto.setError("Introduzca su contraseña")
+                contrasena_texto.requestFocus()
+                return true
+            }
+        }
+        return false
     }
 }

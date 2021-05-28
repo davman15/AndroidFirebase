@@ -1,22 +1,24 @@
 package com.example.animezone.Configuracion
 
+import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
 import com.example.animezone.R
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_configuracion.*
+import kotlinx.android.synthetic.main.activity_autentificar_credenciales.*
 
-class ConfiguracionActivity : AppCompatActivity() {
+class AutentificarCredencialesActivity : AppCompatActivity() {
     private var baseDatos = Firebase.firestore
     private var autentificacion = Firebase.auth
     private val usuarioConectado = Firebase.auth.currentUser
     private var referenciaUsuarios = baseDatos.collection("Usuarios")
+    private var saberUsuarioConectado=""
     private var referenciaNotificacionesNoLeidas =
         baseDatos.collection("Usuarios").document(autentificacion.currentUser.displayName)
             .collection("Notificaciones No Leidas")
@@ -39,13 +41,53 @@ class ConfiguracionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_configuracion)
-        borrarCuenta_cv.setOnClickListener {
-            finish()
-            val intent = Intent(this, AutentificarCredencialesActivity::class.java)
-            startActivity(intent)
+        setContentView(R.layout.activity_autentificar_credenciales)
+        informacion_Alerta()
+        saberUsuarioConectado=autentificacion.currentUser.displayName
+        validar_credenciales_btn.setOnClickListener {
+            if (validar_email_text.text.toString().trim() == "") {
+                validar_email_text.setError("Introduzca su email")
+                validar_email_text.requestFocus()
+                return@setOnClickListener
+            } else if (validar_contrasena_text.text.toString() == "") {
+                validar_contrasena_text.setError("Introduzca su contraseña")
+                validar_contrasena_text.requestFocus()
+                return@setOnClickListener
+            }
+            val credenciales = EmailAuthProvider.getCredential(
+                validar_email_text.text.toString(),
+                validar_contrasena_text.text.toString()
+            )
+
+            usuarioConectado.reauthenticate(credenciales).addOnSuccessListener {
+                elegirBorrarCuenta()
+            }.addOnFailureListener {
+                mostrarErrorCredenciales()
+            }
+
         }
     }
+
+    private fun informacion_Alerta() {
+        AlertDialog.Builder(this).apply {
+            setTitle("Eliminar Cuenta")
+            setMessage("Para poder borrar su cuenta debe de volver a autentificar sus datos")
+            setPositiveButton(Html.fromHtml("<font color='#FFFFFF'>Aceptar</font>"), null)
+        }.show()
+    }
+
+    private fun mostrarErrorCredenciales() {
+        AlertDialog.Builder(this).apply {
+            setTitle("Credenciales Incorrectas")
+            setMessage("Ponga sus credenciales correctamente")
+            setPositiveButton(
+                Html.fromHtml("<font color='#FFFFFF'>Aceptar</font>"),
+                null
+            )
+        }.show()
+    }
+
+
 
     private fun elegirBorrarCuenta() {
         AlertDialog.Builder(this).apply {
@@ -78,13 +120,11 @@ class ConfiguracionActivity : AppCompatActivity() {
         referenciaNotificaciones.get().addOnSuccessListener {
             if (it.isEmpty) {
                 eliminarSeguidores()
-
             } else {
                 for (notificacion in it) {
                     referenciaNotificaciones.document(notificacion.id).delete()
                         .addOnCompleteListener {
                             eliminarSeguidores()
-
                         }
                 }
             }
@@ -143,11 +183,11 @@ class ConfiguracionActivity : AppCompatActivity() {
                             borrarUsuario()
                         } else {
                             for (seguidor in seguidores) {
-                                    referenciaUsuarios.document(usuario.id).collection("Seguidores")
-                                        .document(autentificacion.currentUser.displayName).delete()
-                                        .addOnCompleteListener {
-                                            borrarUsuario()
-                                        }
+                                referenciaUsuarios.document(usuario.id).collection("Seguidores")
+                                    .document(autentificacion.currentUser.displayName).delete()
+                                    .addOnCompleteListener {
+                                        borrarUsuario()
+                                    }
                             }
                         }
                     }
@@ -158,7 +198,7 @@ class ConfiguracionActivity : AppCompatActivity() {
 
     private fun borrarUsuario() {
         referenciaUsuarios
-            .document(autentificacion.currentUser.displayName)
+            .document(saberUsuarioConectado)
             .delete()
             .addOnSuccessListener {
                 println("Entro en usuarios que existe")

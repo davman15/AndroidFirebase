@@ -4,22 +4,15 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.example.animezone.Notificaciones.Notificacion
 import com.example.animezone.Perfil.PerfilActivity
 import com.example.animezone.Perfil.PerfilAjenoActivity
@@ -27,7 +20,6 @@ import com.example.animezone.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.card_post.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -72,12 +64,12 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
                 Glide.with(holder.itemView.context).load(it?.getString("imagen").toString()).fitCenter()
                     .into(holder.layout.imagenPerfilMenu)
             }
-        likeAnimacion2(holder.layout.like_btn,R.raw.bandai_dokkan,genteLikes)
+        likeAnimacionCargaPrevia(holder.layout.like_btn,R.raw.bandai_dokkan,genteLikes)
 
         //Si la gente le gusta y le da al boton
         holder.layout.like_btn.setOnClickListener {
             genteLikes = !genteLikes
-            likeAnimacion(holder.layout.like_btn,R.raw.bandai_dokkan,genteLikes)
+            likeAnimacionAlDarle(holder.layout.like_btn,R.raw.bandai_dokkan,genteLikes)
 
             //Si la gente le da like se añade el id del usuario a la lista de me gusta que tiene la publicacion
             if (genteLikes) {
@@ -109,7 +101,7 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
 
         holder.layout.anadirFavorito_btn.setOnClickListener {
             //Aqui controlo si cada publicacion se encuentra en la lista de favoritos del usuario
-            eliminarAnadirFavoritos(publicacion, holder)
+            eliminarAnadirFavoritos(publicacion, holder,R.raw.animacion_star)
         }
 
     }
@@ -132,7 +124,8 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
         val notificacion = Notificacion(
             usuarioId = autentificacion.currentUser.displayName,
             mensaje = " te ha dado un like en tu publicación.",
-            fecha = Date()
+            fecha = Date(),
+            id = autentificacion.currentUser.displayName+"-"+fechaFormateada.format(Date())
         )
         fechaId = fechaFormateada.format(notificacion.fecha)
         referenciaUsuarios.document(otroUsuario).collection("Notificaciones")
@@ -143,19 +136,19 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
             }
     }
 
-    private fun eliminarAnadirFavoritos(publicacion: Publicacion, holder: ViewHolder) {
+    private fun eliminarAnadirFavoritos(publicacion: Publicacion, holder: ViewHolder,animacion: Int) {
         var referenciaFavoritos = basedeDatos.collection("Usuarios")
             .document(autentificacion.currentUser.displayName)
             .collection("Favoritos").document(publicacion.uid!!)
 
         referenciaFavoritos.get().addOnSuccessListener {
+
             if (it.exists()) {
                 basedeDatos.collection("Usuarios")
                     .document(autentificacion.currentUser.displayName)
                     .collection("Favoritos").document(publicacion.uid!!).delete()
                     .addOnSuccessListener {
                         Toast.makeText(holder.itemView.context, "Eliminado de Favoritos", Toast.LENGTH_SHORT).show()
-
                         holder.itemView.anadirFavorito_btn.animate().alpha(0f).setDuration(300)
                             .setListener(object : AnimatorListenerAdapter() {
                                 override fun onAnimationEnd(animation: Animator?) {
@@ -167,8 +160,9 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
             } else {
                 referenciaFavoritos.set(publicacion)
                     .addOnSuccessListener {
-                        cambiarColorFavorito(favorito, holder.itemView.anadirFavorito_btn,R.raw.animacion_star)
-                        Toast.makeText(holder.itemView.context, "Añadido a Favoritos", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(holder.itemView.context, "Añadido a Favoritos", Toast.LENGTH_SHORT).show()
+                            holder.itemView.anadirFavorito_btn.setAnimation(animacion)
+                            holder.itemView.anadirFavorito_btn.playAnimation()
                     }
             }
         }
@@ -194,7 +188,7 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
             startActivity(activity, intent, Bundle())
     }
 
-    private fun likeAnimacion(imageView: LottieAnimationView, animacion:Int, darLike:Boolean):Boolean{
+    private fun likeAnimacionAlDarle(imageView: LottieAnimationView, animacion:Int, darLike:Boolean):Boolean{
         if(darLike){
             imageView.setAnimation(animacion)
             imageView.playAnimation()
@@ -209,7 +203,8 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
         return darLike
     }
 
-    private fun likeAnimacion2(imageView: LottieAnimationView, animacion:Int, darLike:Boolean):Boolean{
+    //Este metodo es que para que cuando el usuario se meta de nuevo y si le dio like solo tenga
+    private fun likeAnimacionCargaPrevia(imageView: LottieAnimationView, animacion:Int, darLike:Boolean):Boolean{
         if(darLike){
             imageView.setAnimation(animacion)
             imageView.playAnimation()
@@ -234,12 +229,14 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
     private fun cambiarColorFavorito(darFavorito: Boolean, botonFavorito: LottieAnimationView,animacion:Int) {
         //Si le di me gusta a la publicacion tendra un color
         if (darFavorito){
+            println("Lo añade")
             botonFavorito.setAnimation(animacion)
             botonFavorito.playAnimation()
         }
 
         //Sino me gusta la publicacion tendrá color negro el boton de Me gusta
         else {
+            println("Lo quita")
             botonFavorito.animate().alpha(0f).setDuration(300)
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator?) {

@@ -102,7 +102,8 @@ class PerfilAjenoActivity : AppCompatActivity() {
         val notificacion = Notificacion(
             usuarioId = autentificacion.currentUser.displayName,
             mensaje = " te ha empezado a seguir.",
-            fecha = Date()
+            fecha = Date(),
+            id = autentificacion.currentUser.displayName+"-"+fechaFormateada.format(Date())
         )
         fechaId = fechaFormateada.format(notificacion.fecha)
         referenciaUsuarios.document(nicknamePerfilAjeno_tx.text.toString()).collection("Notificaciones")

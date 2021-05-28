@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_publicaciones_favoritas.*
 import kotlinx.android.synthetic.main.activity_tus_publicaciones.*
 
 class TusPublicacionesActivity : AppCompatActivity() {
@@ -24,6 +25,7 @@ class TusPublicacionesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tus_publicaciones)
         tuspublicaciones_circulo1.visibility=View.VISIBLE
         tuspublicaciones_circulo2.visibility=View.VISIBLE
+
         lista.addSnapshotListener { value, error ->
             val publicaciones = value!!.toObjects(Publicacion::class.java)
 
@@ -31,6 +33,10 @@ class TusPublicacionesActivity : AppCompatActivity() {
             publicaciones.forEachIndexed { index, publicacion ->
                 publicacion.uid = value.documents[index].id
             }
+            if(publicaciones.size<=0)
+                notienespublicaciones_tv.visibility=View.VISIBLE
+            else
+                notienespublicaciones_tv.visibility=View.INVISIBLE
 
             tuspublicaciones_rv.apply {
                 //El tamaño es fijo del recyclerView
@@ -43,6 +49,7 @@ class TusPublicacionesActivity : AppCompatActivity() {
             }
             tuspublicaciones_circulo1.visibility=View.INVISIBLE
             tuspublicaciones_circulo2.visibility=View.INVISIBLE
+
         }
 
     }

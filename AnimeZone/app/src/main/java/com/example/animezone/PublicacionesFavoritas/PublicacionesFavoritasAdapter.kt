@@ -63,7 +63,7 @@ class PublicacionesFavoritasAdapter(
         baseDatos.collection("Usuarios").document(publicaciones.usuarioNombre.toString())
             .addSnapshotListener { snapshot, e ->
                 //Aqui llamo a la imagen del perfil del usuario
-                Glide.with(holder.itemView.context).load(snapshot?.getString("imagen").toString())
+                Glide.with(activity.baseContext).load(snapshot?.getString("imagen").toString())
                     .fitCenter()
                     .into(holder.itemView.imagenPerfilFavorito)
             }

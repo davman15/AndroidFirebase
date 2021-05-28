@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.lista_seguidores.view.*
 class SeguidoresAdapter(val seguidorClick: (Usuario) -> Unit) :
     RecyclerView.Adapter<SeguidoresAdapter.SeguidoresViewHolder>() {
     private val baseDatos = Firebase.firestore
-    private val autentificacion = Firebase.auth
     var listaSeguidores: List<Usuario> = emptyList()
 
 

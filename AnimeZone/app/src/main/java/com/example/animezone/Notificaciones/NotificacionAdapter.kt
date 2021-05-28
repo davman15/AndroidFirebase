@@ -52,9 +52,16 @@ class NotificacionAdapter(val notificacionClick: (Notificacion) -> Unit) :
     ) {
         baseDatos.collection("Usuarios").document(listaNotificaciones.usuarioId.toString())
             .addSnapshotListener { value, error ->
-                Glide.with(holder.itemView.context)
-                    .load(value?.getString("imagen").toString())
-                    .into(holder.itemView.imagenAutorNotificacion)
+                if(value?.getString("imagen").toString()=="null"){
+                    Glide.with(holder.itemView.context)
+                        .load("https://firebasestorage.googleapis.com/v0/b/animezone-82466.appspot.com/o/ImagenPerfilPorDefecto%2Fsinperfil.png?alt=media&token=79062551-4c24-45d7-9243-21030e6755b9")
+                        .into(holder.itemView.imagenAutorNotificacion)
+                }
+                else{
+                    Glide.with(holder.itemView.context)
+                        .load(value?.getString("imagen").toString())
+                        .into(holder.itemView.imagenAutorNotificacion)
+                }
             }
     }
 

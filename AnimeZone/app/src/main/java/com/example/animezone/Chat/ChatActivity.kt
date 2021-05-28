@@ -150,7 +150,8 @@ class ChatActivity : AppCompatActivity() {
         val notificacion = Notificacion(
             usuarioId = autentificacion.currentUser.displayName,
             mensaje = " quiere empezar una nueva conversación contigo.",
-            fecha = Date()
+            fecha = Date(),
+            id = autentificacion.currentUser.displayName+"-"+fechaFormateada.format(Date())
         )
         fechaId = fechaFormateada.format(notificacion.fecha)
         referenciaUsuarios.document(otroUsuario).collection("Notificaciones")

@@ -31,8 +31,9 @@ import kotlinx.android.synthetic.main.activity_menu_principal.*
 class MenuPrincipalActivity : AppCompatActivity() {
     private val autentificacion = FirebaseAuth.getInstance()
     private var basedeDatos = Firebase.firestore
-    private var referenciaNotificacionesNoLeidas =
-        basedeDatos.collection("Usuarios").document(autentificacion.currentUser.displayName)
+    private var referenciaNotificacionesnoLeidas =
+        basedeDatos.collection("Usuarios")
+            .document(autentificacion.currentUser.displayName)
             .collection("Notificaciones No Leidas")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,10 +78,10 @@ class MenuPrincipalActivity : AppCompatActivity() {
         notificaciones_menuLateral.setOnClickListener {
             val intent = Intent(this, NotificacionesActivity::class.java)
             startActivity(intent)
-            referenciaNotificacionesNoLeidas.get().addOnSuccessListener {
+            referenciaNotificacionesnoLeidas.get().addOnSuccessListener {
                 if (it != null) {
                     for (notificacionNoLeida in it) {
-                        referenciaNotificacionesNoLeidas.document(notificacionNoLeida.id).delete()
+                        referenciaNotificacionesnoLeidas.document(notificacionNoLeida.id).delete()
                     }
                 }
             }
@@ -99,7 +100,7 @@ class MenuPrincipalActivity : AppCompatActivity() {
     private fun comprobarNotificaciones() {
         val iconoLateral: ImageView = findViewById(R.id.iconoverde_notificaciones_menuLateral)
         val contador_Notificaciones: TextView = findViewById(R.id.contador_Notificaciones_lateral)
-        referenciaNotificacionesNoLeidas.addSnapshotListener { value, error ->
+        referenciaNotificacionesnoLeidas.addSnapshotListener { value, error ->
             if (value!!.isEmpty) {
                 icono_verde_Menu.visibility = View.INVISIBLE
                 contador_Notificaciones.setText("")
@@ -163,7 +164,7 @@ class MenuPrincipalActivity : AppCompatActivity() {
                 .into(imagenMenuLateralPerfil)
             basedeDatos.collection("Usuarios").document(autentificacion.currentUser.displayName)
                 .addSnapshotListener { snapshot, e ->
-                    Glide.with(this).load(snapshot?.getString("imagen").toString()).fitCenter()
+                    Glide.with(applicationContext).load(snapshot!!.getString("imagen").toString()).fitCenter()
                         .into(imagenPerfilMenu)
                 }
         } else {

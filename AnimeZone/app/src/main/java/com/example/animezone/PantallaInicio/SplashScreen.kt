@@ -30,7 +30,7 @@ class SplashScreen : AppCompatActivity() {
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 finish()
             }
-        } else {
+        } else if(autentificacion.currentUser!=null) {
             pantalla_carga.animate().setDuration(100).alpha(1f).withEndAction {
                 val paginaPrincipal = Intent(
                     this,

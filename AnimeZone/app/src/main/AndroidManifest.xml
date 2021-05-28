@@ -13,7 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".TusPublicaciones.TusPublicacionesActivity"></activity>
+        <activity android:name=".Configuracion.CambiarContrasenaActivity"></activity>
+        <activity android:name=".Configuracion.AutentificarCredencialesActivity" />
+        <activity android:name=".TusPublicaciones.TusPublicacionesActivity" />
         <activity android:name=".Wallpapers.WallpaperActivity" />
         <activity android:name=".Notificaciones.NotificacionesActivity" />
         <activity android:name=".PublicacionesFavoritas.PublicacionesFavoritasActivity" />
