@@ -35,9 +35,8 @@ class PerfilActivity : AppCompatActivity() {
     private var campoApellidosTextoPerfil = ""
     private var campoCorreoTextoPerfil = ""
     private var campoNombreIdTextoPerfil = ""
-    private var campoContrasenaPerfil = ""
     private var campoDescripcionTextoPerfil=""
-
+    private var valorContrasena=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil)
@@ -52,8 +51,8 @@ class PerfilActivity : AppCompatActivity() {
                 apellidosPerfil_texto.setText(it.getString("apellidos").toString())
                 correoPerfil_texto.setText(it.getString("correo").toString())
                 nicknamePerfil_texto.setText(it.getString("usuarioId").toString())
-                contrasenaPerfil_texto.setText(it.getString("contrasena").toString())
                 descripcion_texto.setText(it.getString("descripcion").toString())
+                valorContrasena=it.getString("contrasena").toString()
                 if (apellidosPerfil_texto.text.toString() == "null")
                     apellidosPerfil_texto.setText("")
 
@@ -90,7 +89,7 @@ class PerfilActivity : AppCompatActivity() {
                 campoApellidosTextoPerfil = apellidosPerfil_texto.text.toString()
                 campoCorreoTextoPerfil = correoPerfil_texto.text.toString()
                 campoNombreIdTextoPerfil = nicknamePerfil_texto.text.toString()
-                campoContrasenaPerfil = contrasenaPerfil_texto.text.toString()
+
                 campoDescripcionTextoPerfil=descripcion_texto.text.toString()
 
                 //Validar Campos
@@ -98,11 +97,15 @@ class PerfilActivity : AppCompatActivity() {
                     isEmpty(campoNombreTextoPerfil) -> {
                         nombrePerfil_texto.setError("Introduzca su nombre")
                         nombrePerfil_texto.requestFocus()
+                        circulo1.visibility= View.INVISIBLE
+                        circulo2.visibility= View.INVISIBLE
                         return@setOnClickListener
                     }
                     isEmpty(campoApellidosTextoPerfil) -> {
                         apellidosPerfil_texto.setError("Introduzca sus apellidos")
                         apellidosPerfil_texto.requestFocus()
+                        circulo1.visibility= View.INVISIBLE
+                        circulo2.visibility= View.INVISIBLE
                         return@setOnClickListener
                     }
                     isEmpty(campoCorreoTextoPerfil) -> {
@@ -115,25 +118,22 @@ class PerfilActivity : AppCompatActivity() {
                         nicknamePerfil_texto.requestFocus()
                         return@setOnClickListener
                     }
-                    isEmpty(campoContrasenaPerfil) -> {
-                        contrasenaPerfil_texto.setError("Introduzca su contraseña")
-                        contrasenaPerfil_texto.requestFocus()
-                        return@setOnClickListener
-                    }
                     isEmpty(campoDescripcionTextoPerfil)->{
                         descripcion_texto.setError("Introduzca su descripción")
                         descripcion_texto.requestFocus()
+                        circulo1.visibility= View.INVISIBLE
+                        circulo2.visibility= View.INVISIBLE
                         return@setOnClickListener
                     }
                 }
-
+                println(valorContrasena)
                 //Si esta bien actualiza los campos
                 actualizarRegistros(
                     campoNombreTextoPerfil,
                     campoApellidosTextoPerfil,
                     campoCorreoTextoPerfil,
                     campoNombreIdTextoPerfil,
-                    campoContrasenaPerfil,
+                    valorContrasena,
                     campoDescripcionTextoPerfil
                 )
                 camposPerfil(false)
@@ -193,7 +193,7 @@ class PerfilActivity : AppCompatActivity() {
             //Si se sube bien al Storage, Creo el link con downloadURL
             folder.downloadUrl.addOnSuccessListener { urlImagen ->
                 foto1 = urlImagen.toString()
-                actualizarPerfil(nombre, apellidos, correo, usuarioId, contrasena, foto1,descripcion)
+                actualizarPerfil(nombre, apellidos, correo, usuarioId,contrasena, foto1,descripcion)
             }
         }
     }

@@ -7,6 +7,5 @@ class Usuario(
     var usuarioId: String? = null,
     val contrasena: String? = null,
     val imagen:String?=null,
-    val descripcion:String?=null,
-    val seguidores: ArrayList<String>? = arrayListOf()
+    val descripcion:String?=null
 )

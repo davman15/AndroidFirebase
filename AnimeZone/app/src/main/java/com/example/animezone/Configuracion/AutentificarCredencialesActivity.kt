@@ -1,11 +1,11 @@
 package com.example.animezone.Configuracion
 
-import android.content.Context
 import android.content.DialogInterface
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.example.animezone.R
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -215,7 +215,8 @@ class AutentificarCredencialesActivity : AppCompatActivity() {
                     usuarioConectado.delete()
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                finish()
+                                //Borra la actual actividad mas todas las de la aplicacion
+                                finishAffinity()
                             }
                         }
                 } else {
@@ -225,7 +226,7 @@ class AutentificarCredencialesActivity : AppCompatActivity() {
                                 usuarioConectado.delete()
                                     .addOnCompleteListener { task ->
                                         if (task.isSuccessful) {
-                                            finish()
+                                            finishAffinity()
                                         }
                                     }
                             }

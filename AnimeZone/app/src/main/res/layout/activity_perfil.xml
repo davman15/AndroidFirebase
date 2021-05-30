@@ -7,21 +7,6 @@
     android:background="@drawable/fondo_menuperfil"
     tools:context=".Perfil.PerfilActivity">
 
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginLeft="56dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="283dp"
-        android:layout_marginRight="283dp"
-        android:text="Contraseña"
-        android:textColor="@color/blanco"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/correoPerfil_texto" />
-
 
     <ProgressBar
         android:id="@+id/circulo1"
@@ -52,7 +37,7 @@
         android:id="@+id/apellidosPerfil_texto"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="7dp"
         android:layout_marginRight="7dp"
         android:ems="10"
@@ -69,7 +54,7 @@
         android:layout_height="20dp"
         android:layout_marginStart="56dp"
         android:layout_marginLeft="56dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="290dp"
         android:layout_marginRight="290dp"
         android:text="Nickname"
@@ -85,7 +70,7 @@
         android:layout_height="20dp"
         android:layout_marginStart="56dp"
         android:layout_marginLeft="56dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="290dp"
         android:layout_marginRight="290dp"
         android:text="Apellidos"
@@ -126,7 +111,7 @@
         android:layout_height="20dp"
         android:layout_marginStart="56dp"
         android:layout_marginLeft="56dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="302dp"
         android:layout_marginRight="302dp"
         android:text="Nombre"
@@ -140,7 +125,7 @@
         android:id="@+id/nombrePerfil_texto"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="7dp"
         android:layout_marginRight="7dp"
         android:ems="10"
@@ -156,7 +141,7 @@
         android:id="@+id/correoPerfil_texto"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="7dp"
         android:layout_marginRight="7dp"
         android:ems="10"
@@ -171,7 +156,7 @@
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="257dp"
         android:layout_marginRight="257dp"
         android:text="Correo"
@@ -184,7 +169,7 @@
         android:id="@+id/nicknamePerfil_texto"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="7dp"
         android:layout_marginRight="7dp"
         android:ems="10"
@@ -195,34 +180,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
-    <EditText
-        android:id="@+id/contrasenaPerfil_texto"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:ems="10"
-        android:enabled="false"
-        android:inputType="textPassword"
-        android:textColor="@color/blanco"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
     <Button
 
         android:id="@+id/editarPerfil_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/boton_editar_perfil"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:text="Editar Perfil"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contrasenaPerfil_texto" />
+        app:layout_constraintTop_toBottomOf="@+id/correoPerfil_texto" />
 
     <TextView
         android:id="@+id/textView21"

@@ -40,8 +40,8 @@ class ConfiguracionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_configuracion)
+
         borrarCuenta_cv.setOnClickListener {
-            finish()
             val intent = Intent(this, AutentificarCredencialesActivity::class.java)
             startActivity(intent)
         }

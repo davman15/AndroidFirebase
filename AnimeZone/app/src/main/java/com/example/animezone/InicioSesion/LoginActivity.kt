@@ -10,6 +10,8 @@ import com.example.animezone.MenuPrincipalActivity
 import com.example.animezone.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
+import java.math.BigInteger
+import java.security.MessageDigest
 
 class LoginActivity : AppCompatActivity() {
     private val autentificacion = FirebaseAuth.getInstance()
@@ -64,6 +66,11 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, RegistroActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun md5(input:String): String {
+        val md = MessageDigest.getInstance("MD5")
+        return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')
     }
 
     private fun iniciarSesion() {

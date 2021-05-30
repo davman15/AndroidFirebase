@@ -15,6 +15,8 @@ import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_registro.*
+import java.math.BigInteger
+import java.security.MessageDigest
 
 class RegistroActivity : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
@@ -55,6 +57,38 @@ class RegistroActivity : AppCompatActivity() {
         }
     }
 
+    private fun validarCamposRegistro(
+        nombre: String,
+        usuarioId: String,
+        email: String,
+        contrasena: String
+    ): Boolean {
+        when {
+            isEmpty(nombre) -> {
+                nombre_texto.setError("Introduzca su nombre")
+                nombre_texto.requestFocus()
+                return true
+            }
+            isEmpty(usuarioId) -> {
+                nickname_texto.setError("Introduzca su nombre de usuario")
+                nickname_texto.requestFocus()
+                return true
+            }
+            isEmpty(email) -> {
+                email_texto.setError("Introduzca su email")
+                email_texto.requestFocus()
+                return true
+            }
+            isEmpty(contrasena) -> {
+                contrasena_texto.setError("Introduzca su contraseña")
+                contrasena_texto.requestFocus()
+                return true
+            }
+        }
+        return false
+    }
+
+    //Si se repite el correo en la base de datos o si hay algun otro tipo de error
     private fun validarCredencialesRegistro(
         email: String,
         contrasena: String,
@@ -75,8 +109,16 @@ class RegistroActivity : AppCompatActivity() {
                 }
             }
             .addOnSuccessListener {
-                registrarUsuario(nombre, email, usuarioId, contrasena)
+                var contrasenaEncriptada=md5(contrasena)
+                println(contrasenaEncriptada)
+                registrarUsuario(nombre, email, usuarioId, contrasenaEncriptada)
+
             }
+    }
+
+    private fun md5(input:String): String {
+        val md = MessageDigest.getInstance("MD5")
+        return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')
     }
 
     private fun registrarUsuario(
@@ -110,34 +152,5 @@ class RegistroActivity : AppCompatActivity() {
         }
     }
 
-    private fun validarCamposRegistro(
-        nombre: String,
-        usuarioId: String,
-        email: String,
-        contrasena: String
-    ): Boolean {
-        when {
-            isEmpty(nombre) -> {
-                nombre_texto.setError("Introduzca su nombre")
-                nombre_texto.requestFocus()
-                return true
-            }
-            isEmpty(usuarioId) -> {
-                nickname_texto.setError("Introduzca su nombre de usuario")
-                nickname_texto.requestFocus()
-                return true
-            }
-            isEmpty(email) -> {
-                email_texto.setError("Introduzca su email")
-                email_texto.requestFocus()
-                return true
-            }
-            isEmpty(contrasena) -> {
-                contrasena_texto.setError("Introduzca su contraseña")
-                contrasena_texto.requestFocus()
-                return true
-            }
-        }
-        return false
-    }
+
 }

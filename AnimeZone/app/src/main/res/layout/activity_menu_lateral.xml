@@ -225,9 +225,10 @@
 
                 android:id="@+id/textView17"
                 android:layout_width="123dp"
-                android:layout_height="21dp"
+                android:layout_height="41dp"
                 android:layout_marginEnd="80dp"
                 android:layout_marginRight="80dp"
+                android:gravity="fill"
                 android:text="Tus Publicaciones"
                 android:textColor="@color/blanco"
                 app:layout_constraintBottom_toBottomOf="parent"
