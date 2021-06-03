@@ -41,10 +41,8 @@ class BuscadorActivity : AppCompatActivity() {
                     .addOnSuccessListener {
                         val listaUsuarios = it.toObjects(Usuario::class.java)
                         nombreBuscador?.let { nombreIntroducido ->
-                            (buscador_rv.adapter as BuscadorAdapter).filtradorUsuarios(
-                                listaUsuarios,
-                                nombreIntroducido
-                            )
+                            (buscador_rv.adapter as BuscadorAdapter)
+                                .filtradorUsuarios(listaUsuarios, nombreIntroducido)
                         }
                     }
                 return false

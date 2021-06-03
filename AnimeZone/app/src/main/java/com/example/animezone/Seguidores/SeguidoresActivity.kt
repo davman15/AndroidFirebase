@@ -9,6 +9,7 @@ import com.example.animezone.Clase.Usuario
 import com.example.animezone.Perfil.PerfilAjenoActivity
 import com.example.animezone.R
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_seguidores.*
@@ -24,13 +25,12 @@ class SeguidoresActivity : AppCompatActivity() {
         listaSeguidores_circulo1.visibility= View.VISIBLE
 
         listaSeguidores.layoutManager = LinearLayoutManager(this)
-
         listaSeguidores.adapter = SeguidoresAdapter { usuario ->
             seleccionarSeguidor(usuario)
         }
 
         baseDatos.collection("Usuarios").document(autentificacion.currentUser.displayName)
-            .collection("Seguidores")
+            .collection("Seguidores").orderBy("usuarioId")
             .addSnapshotListener { value, error ->
                 val listaUsuarios = value?.toObjects(Usuario::class.java)
                 if (listaUsuarios != null) {

@@ -27,7 +27,6 @@ import java.util.*
 
 class PublicacionAdapter(private val activity: Activity, private var dataset: List<Publicacion>) :
     RecyclerView.Adapter<PublicacionAdapter.ViewHolder>() {
-    //Variables Firebase
     private val autentificacion = FirebaseAuth.getInstance()
     private val basedeDatos = Firebase.firestore
     private var favorito = false
@@ -42,8 +41,8 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
     override fun getItemCount() = dataset.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val fechaFormateada = SimpleDateFormat("dd/M/yyyy hh:mm a")
         val publicacion = dataset[position]
+        val fechaFormateada = SimpleDateFormat("dd/M/yyyy hh:mm a")
         val likes = publicacion.likes!!.toMutableList()
         var genteLikes = likes.contains(autentificacion.currentUser.displayName)
 
@@ -57,13 +56,18 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
             .load(publicacion.foto)
             .into(holder.layout.imagenPublicacion)
 
-        //Coge siempre la foto de perfil del usuario
-        basedeDatos.collection("Usuarios").document(publicacion.usuarioNombre.toString()).get()
+        //Con esta consulta cojo la imagen de Perfil correspondiente al usuario
+        basedeDatos.collection("Usuarios")
+            .document(publicacion.usuarioNombre.toString())
+            .get()
             .addOnSuccessListener {
                 //Aqui llamo a la imagen del perfil del usuario
-                Glide.with(holder.itemView.context).load(it?.getString("imagen").toString()).fitCenter()
+                Glide.with(holder.itemView.context)
+                    .load(it?.getString("imagen").toString())
+                    .fitCenter()
                     .into(holder.layout.imagenPerfilMenu)
             }
+
         likeAnimacionCargaPrevia(holder.layout.like_btn,R.raw.bandai_dokkan,genteLikes)
 
         //Si la gente le gusta y le da al boton
@@ -173,7 +177,7 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
         basedeDatos.collection("Usuarios").document(autentificacion.currentUser.displayName)
             .collection("Favoritos").document(publicacion.uid!!).get().addOnSuccessListener {
                 favorito = it.exists()
-                cambiarColorFavorito2(favorito, holder.itemView.anadirFavorito_btn,R.raw.animacion_star)
+                cambiarColorFavorito(favorito, holder.itemView.anadirFavorito_btn,R.raw.animacion_star)
             }
     }
 
@@ -204,6 +208,7 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
     }
 
     //Este metodo es que para que cuando el usuario se meta de nuevo y si le dio like solo tenga
+
     private fun likeAnimacionCargaPrevia(imageView: LottieAnimationView, animacion:Int, darLike:Boolean):Boolean{
         if(darLike){
             imageView.setAnimation(animacion)
@@ -214,7 +219,7 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
         return darLike
     }
 
-    private fun cambiarColorFavorito2(darFavorito: Boolean, botonFavorito: LottieAnimationView,animacion:Int) {
+    private fun cambiarColorFavorito(darFavorito: Boolean, botonFavorito: LottieAnimationView,animacion:Int) {
         //Si le di me gusta a la publicacion tendra un color
         if (darFavorito){
             botonFavorito.setAnimation(animacion)
@@ -223,27 +228,6 @@ class PublicacionAdapter(private val activity: Activity, private var dataset: Li
         //Sino me gusta la publicacion tendrá color negro el boton de Me gusta
         else {
             botonFavorito.setImageResource(R.drawable.estrella_icono)
-        }
-    }
-
-    private fun cambiarColorFavorito(darFavorito: Boolean, botonFavorito: LottieAnimationView,animacion:Int) {
-        //Si le di me gusta a la publicacion tendra un color
-        if (darFavorito){
-            println("Lo añade")
-            botonFavorito.setAnimation(animacion)
-            botonFavorito.playAnimation()
-        }
-
-        //Sino me gusta la publicacion tendrá color negro el boton de Me gusta
-        else {
-            println("Lo quita")
-            botonFavorito.animate().alpha(0f).setDuration(300)
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        botonFavorito.setImageResource(R.drawable.estrella_icono)
-                        botonFavorito.alpha = 1f
-                    }
-                })
         }
     }
 }

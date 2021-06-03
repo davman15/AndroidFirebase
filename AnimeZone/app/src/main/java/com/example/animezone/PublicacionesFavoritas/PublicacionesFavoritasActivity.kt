@@ -19,10 +19,10 @@ class PublicacionesFavoritasActivity : AppCompatActivity() {
         setContentView(R.layout.activity_publicaciones_favoritas)
         listaPublicacionesFavoritas_circulo1.visibility= View.VISIBLE
         listaPublicacionesFavoritas_circulo2.visibility= View.VISIBLE
+
         baseDatos.collection("Usuarios").document(autentificacion.currentUser.displayName).collection("Favoritos")
             .addSnapshotListener { value, error ->
                 var publicaciones = value!!.toObjects(Publicacion::class.java)
-                //Le agrego el id del usuario quien hizo la publicacion
                 publicaciones.forEachIndexed { index, publicacion ->
                     publicacion.uid = value.documents[index].id
                 }
@@ -32,15 +32,10 @@ class PublicacionesFavoritasActivity : AppCompatActivity() {
                     notienesfavoritos_tv.visibility=View.INVISIBLE
 
                 listaPublicacionesFavoritas_rv.apply {
-                    //El tamaño es fijo del recyclerView
                     setHasFixedSize(true)
-                    //Lo voy a mostrar por pantalla con un LinearLayout
                     layoutManager = LinearLayoutManager(this@PublicacionesFavoritasActivity)
-                    //El recyclerView nos pide un adapter que es el q hemos hecho: minuto 40 y 1h por ahi
-                    adapter = PublicacionesFavoritasAdapter(
-                        this@PublicacionesFavoritasActivity,
-                        publicaciones
-                    )
+                    adapter = PublicacionesFavoritasAdapter(this@PublicacionesFavoritasActivity,
+                        publicaciones)
 
                     listaPublicacionesFavoritas_circulo1.visibility= View.INVISIBLE
                     listaPublicacionesFavoritas_circulo2.visibility= View.INVISIBLE

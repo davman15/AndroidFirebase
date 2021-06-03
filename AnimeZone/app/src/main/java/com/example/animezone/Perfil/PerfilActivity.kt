@@ -69,7 +69,6 @@ class PerfilActivity : AppCompatActivity() {
                 circulo2.visibility= View.INVISIBLE
             }
 
-        //Toast.makeText(this, "ola", Toast.LENGTH_SHORT).show()
 
         //Para q este desactivado tiene q ser el desactivar false
         editarPerfil_btn.setOnClickListener {
@@ -80,6 +79,7 @@ class PerfilActivity : AppCompatActivity() {
                 }
                 camposPerfil(true)
                 editarPerfil_btn.setText("Guardar Cambios")
+
             } else {
                 circulo1.visibility= View.VISIBLE
                 circulo2.visibility= View.VISIBLE
@@ -89,7 +89,6 @@ class PerfilActivity : AppCompatActivity() {
                 campoApellidosTextoPerfil = apellidosPerfil_texto.text.toString()
                 campoCorreoTextoPerfil = correoPerfil_texto.text.toString()
                 campoNombreIdTextoPerfil = nicknamePerfil_texto.text.toString()
-
                 campoDescripcionTextoPerfil=descripcion_texto.text.toString()
 
                 //Validar Campos
@@ -126,9 +125,8 @@ class PerfilActivity : AppCompatActivity() {
                         return@setOnClickListener
                     }
                 }
-                println(valorContrasena)
-                //Si esta bien actualiza los campos
-                actualizarRegistros(
+
+                comprobarFoto(
                     campoNombreTextoPerfil,
                     campoApellidosTextoPerfil,
                     campoCorreoTextoPerfil,
@@ -149,21 +147,12 @@ class PerfilActivity : AppCompatActivity() {
         descripcion_texto.isEnabled=desactivador
     }
 
-    private fun actualizarRegistros(
-        nombre: String,
-        apellidos: String,
-        correo: String,
-        usuarioId: String,
-        contrasena: String,
-        descripcion: String
-    ) {
+    private fun comprobarFoto(nombre: String, apellidos: String, correo: String, usuarioId: String, contrasena: String, descripcion: String) {
         var foto = ""
-        //Lo subimos al Storage
         if (imagenUri == null) {
             foto = autentificacion.currentUser.photoUrl.toString()
             actualizarPerfil(nombre, apellidos, correo, usuarioId, contrasena, foto,descripcion)
         } else {
-            //El apaño es el siguiente, la primera vez va a fallar en eliminar la foto ya que no existe esa referencia, entonces ira al addOnFailureListener
             storageReferencia.child("$usuarioId/" + autentificacion.currentUser.displayName.toString())
                 .delete()
                 .addOnSuccessListener {
@@ -187,8 +176,7 @@ class PerfilActivity : AppCompatActivity() {
     ) {
         //Aqui creo la subcarpeta de la referencia
         var foto1 = foto
-        val folder =
-            storageReferencia.child("$usuarioId/" + autentificacion.currentUser.displayName.toString())
+        val folder = storageReferencia.child("$usuarioId/" + autentificacion.currentUser.displayName.toString())
         folder.putFile(imagenUri!!).addOnSuccessListener {
             //Si se sube bien al Storage, Creo el link con downloadURL
             folder.downloadUrl.addOnSuccessListener { urlImagen ->
@@ -198,26 +186,8 @@ class PerfilActivity : AppCompatActivity() {
         }
     }
 
-    private fun actualizarPerfil(
-        nombre: String,
-        apellidos: String,
-        correo: String,
-        usuarioId: String,
-        contrasena: String,
-        foto: String,
-        descripcion: String
-    ) {
-        //Meterlos en un objeto
-        val usuario: Usuario = Usuario(
-            nombre,
-            apellidos,
-            correo,
-            usuarioId,
-            contrasena,
-            foto,
-            descripcion
-        )
-
+    private fun actualizarPerfil(nombre: String, apellidos: String, correo: String, usuarioId: String, contrasena: String, foto: String, descripcion: String) {
+        val usuario: Usuario = Usuario(nombre, apellidos, correo, usuarioId, contrasena, foto, descripcion)
         nombre_ImagenPerfil.setText(autentificacion.currentUser.displayName)
         baseDatos.collection("Usuarios").document(campoNombreIdTextoPerfil).set(usuario)
             .addOnSuccessListener {

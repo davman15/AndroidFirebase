@@ -4,16 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.animezone.Chat.ListaChatsActivity
-import com.example.animezone.Clase.Usuario
-import com.example.animezone.Perfil.PerfilActivity
 import com.example.animezone.Perfil.PerfilAjenoActivity
 import com.example.animezone.Publicaciones.ListaPublicacionesActivity
 import com.example.animezone.R
-import com.example.animezone.Seguidores.SeguidoresActivity
-import com.example.animezone.TusPublicaciones.TusPublicacionesActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore

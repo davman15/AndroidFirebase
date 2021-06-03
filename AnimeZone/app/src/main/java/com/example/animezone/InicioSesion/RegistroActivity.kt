@@ -1,6 +1,7 @@
 package com.example.animezone.InicioSesion
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.text.TextUtils.isEmpty
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.example.animezone.Clase.Usuario
+import com.example.animezone.MenuPrincipalActivity
 import com.example.animezone.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
@@ -67,21 +69,29 @@ class RegistroActivity : AppCompatActivity() {
             isEmpty(nombre) -> {
                 nombre_texto.setError("Introduzca su nombre")
                 nombre_texto.requestFocus()
+                registro_circulo1.visibility = View.INVISIBLE
+                registro_circulo2.visibility = View.INVISIBLE
                 return true
             }
             isEmpty(usuarioId) -> {
                 nickname_texto.setError("Introduzca su nombre de usuario")
                 nickname_texto.requestFocus()
+                registro_circulo1.visibility = View.INVISIBLE
+                registro_circulo2.visibility = View.INVISIBLE
                 return true
             }
             isEmpty(email) -> {
                 email_texto.setError("Introduzca su email")
                 email_texto.requestFocus()
+                registro_circulo1.visibility = View.INVISIBLE
+                registro_circulo2.visibility = View.INVISIBLE
                 return true
             }
             isEmpty(contrasena) -> {
                 contrasena_texto.setError("Introduzca su contraseña")
                 contrasena_texto.requestFocus()
+                registro_circulo1.visibility = View.INVISIBLE
+                registro_circulo2.visibility = View.INVISIBLE
                 return true
             }
         }
@@ -127,15 +137,12 @@ class RegistroActivity : AppCompatActivity() {
         usuarioId: String,
         contrasena: String
     ) {
-        //Meto la foto directamente en la variable
-        val foto =
-            "https://firebasestorage.googleapis.com/v0/b/animezone-82466.appspot.com/o/ImagenPerfilPorDefecto%2Fsinperfil.png?alt=media&token=79062551-4c24-45d7-9243-21030e6755b9"
-        //Creo el objeto que voy a enviar a la base de datos
+        val foto = "https://firebasestorage.googleapis.com/v0/b/animezone-82466.appspot.com/o/ImagenPerfilPorDefecto%2Fsinperfil.png?" +
+                "alt=media&token=79062551-4c24-45d7-9243-21030e6755b9"
         val usuario = Usuario(nombre, null, email, usuarioId, contrasena, foto, "Me encanta el anime. espero que nos llevemos bien!! xD")
-        //Creo la coleccion que va a haber en la base de datos que se va a llamar usuarios , un documento que su id va a ser el nickname, y el objeto usuario lo meto a la base de datos
+
         basedeDatos.collection("Usuarios").document(usuarioId).set(usuario)
-        //Aqui lo que hago es si esta bien, el registro, (tuve un problema que no me cogia el displayName del que esta iniciado sesion)
-        //Actualizo el perfil y le doy valor al displayName ya que me daba valor null
+
         val cambiarNick = userProfileChangeRequest {
             displayName = usuarioId
             photoUri = Uri.parse(foto)
@@ -147,10 +154,11 @@ class RegistroActivity : AppCompatActivity() {
             setTitle("Cuenta Creada")
             setMessage("Se ha registrado correctamente")
             setPositiveButton(Html.fromHtml("<font color='#FFFFFF'>Aceptar</font>")) { _: DialogInterface, _: Int ->
-                finish()
+                //Aqui directamente le digo que no se borre lo anterior y que vaya al menu directamente
+                finishAffinity()
+                val intent = Intent(applicationContext, MenuPrincipalActivity::class.java)
+                startActivity(intent)
             }.show()
         }
     }
-
-
 }

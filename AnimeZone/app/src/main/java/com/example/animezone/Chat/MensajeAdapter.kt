@@ -18,11 +18,7 @@ class MensajeAdapter(private val usuario: String): RecyclerView.Adapter<MensajeA
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         return MessageViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.mensajes_chat,
-                parent,
-                false
-            )
+            LayoutInflater.from(parent.context).inflate(R.layout.mensajes_chat, parent, false)
         )
     }
 

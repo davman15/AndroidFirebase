@@ -114,16 +114,16 @@ class ChatActivity : AppCompatActivity() {
 
     private fun enviarMensaje() {
         if (mensajeCampoTexto.text.toString() != "") {
-            //Creo el mensaje
             val mensaje = Mensaje(
                 mensaje = mensajeCampoTexto.text.toString(),
                 from = usuario
             )
+
             //Utilizo este update para que cuando alguien hable a otra persona se le ponga este chat en primer lugar de su lista de chats
+
             baseDatos.collection("Usuarios").document(nombreOtroUsuarioChat.text.toString())
                 .collection("chats")
-                .document(chat_id).update("fechaChat", Date()).addOnSuccessListener {
-                }
+                .document(chat_id).update("fechaChat", Date())
 
 
             //Utilizo este get para que si el usuario manda su primer mensaje al otro usuario tambien en sus notificaciones aparezca que quiere hablar con el

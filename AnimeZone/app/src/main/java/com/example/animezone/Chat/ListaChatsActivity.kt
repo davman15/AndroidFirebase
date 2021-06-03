@@ -36,7 +36,6 @@ class ListaChatsActivity : AppCompatActivity() {
 
         if (usuarioBusqueda.isNotEmpty())
             iniciarBusqueda()
-
     }
 
     private fun iniciarBusqueda() {
@@ -52,7 +51,8 @@ class ListaChatsActivity : AppCompatActivity() {
         }
 
         val usuarioReferencia = baseDatos.collection("Usuarios").document(usuarioBusqueda)
-        usuarioReferencia.collection("chats").orderBy("fechaChat", Query.Direction.DESCENDING).addSnapshotListener { value, error ->
+        usuarioReferencia.collection("chats")
+            .orderBy("fechaChat", Query.Direction.DESCENDING).addSnapshotListener { value, error ->
                 val listaChats = value!!.toObjects(Chat::class.java)
                 (listaChatsRecyclerView.adapter as ChatAdapter).setData(listaChats)
                 if(listaChats.size<=0)
@@ -71,13 +71,14 @@ class ListaChatsActivity : AppCompatActivity() {
         intent.putExtra("chatId", chat.id)
         intent.putExtra("usuario", usuarioBusqueda)
 
-        if (autentificacion.currentUser.displayName == chat.usuarios.first()) {
+        if (autentificacion.currentUser.displayName == chat.usuarios.first())
             intent.putExtra("otroUsuario", chat.nombre)
-        } else if (autentificacion.currentUser.displayName == chat.usuarios.last()) {
+         else if (autentificacion.currentUser.displayName == chat.usuarios.last())
             intent.putExtra("otroUsuario", chat.usuarios.first())
-        }
+
         //Cada vez que doy a un chat existente se actualizara la fecha y ese chat se pondrá en primer lugar ya que lo ordeno por la fecha
-        baseDatos.collection("Usuarios").document(usuarioBusqueda).collection("chats")
+        baseDatos.collection("Usuarios").document(usuarioBusqueda)
+            .collection("chats")
             .document(chat.id).update("fechaChat", Date())
         startActivity(intent)
     }
@@ -97,24 +98,25 @@ class ListaChatsActivity : AppCompatActivity() {
                         .document(nuevoChat_tx.text.toString() + "-" + autentificacion.currentUser.displayName)
                         .get()
                         .addOnSuccessListener { chat1 ->
-                            if (!chat1.exists())
+                            if (!chat1.exists()) {
                                 crearChat(otroUsuario, chatID, intent)
+                                nuevoChat_tx.setText("")
+                            }
                             else if (chat1.exists()) {
                                 val chatID = nuevoChat_tx.text.toString() + "-" + autentificacion.currentUser.displayName
                                 crearChat(otroUsuario, chatID, intent)
+                                nuevoChat_tx.setText("")
                             }
                         }
                 }
-                else {
+                else
                     negarChat()
-                }
             }
     }
 
     private fun crearChat(otroUsuario: String, chatID: String, intent: Intent) {
         //Creo una lista donde pongo el usuario
         val usuarios = listOf(usuarioBusqueda, otroUsuario)
-
         //Y lo pongo en el chat
         val chat = Chat(
             id = chatID,

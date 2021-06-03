@@ -35,14 +35,27 @@ class PerfilAjenoActivity : AppCompatActivity() {
             intent.getStringExtra("UsuarioChat")?.let {
                 usuarioChat = it
             }
-            nombre_imagenPerfilAjeno.setText(usuarioChat)
             coleccionUsuarios.document(usuarioChat).get()
                 .addOnSuccessListener {
                     //Rellenar campos
+                    nombre_imagenPerfilAjeno.setText(it.getString("usuarioId").toString())
                     nombrePerfilAjeno_tx.setText(it.getString("nombreUsuario").toString())
                     apellidosPerfilAjeno_tx.setText(it.getString("apellidos").toString())
                     correoPerfilAjeno_tx.setText(it.getString("correo").toString())
                     nicknamePerfilAjeno_tx.setText(it.getString("usuarioId").toString())
+                    if(nombre_imagenPerfilAjeno.text.toString()=="null"){
+                        nombre_imagenPerfilAjeno.setText("No Disponible")
+                        seguir_btn.isClickable=false
+                        chatear_perfilAjeno_btn.isClickable=false
+                    }
+
+                    if(nombrePerfilAjeno_tx.text.toString()=="null")
+                       nombrePerfilAjeno_tx.setText("")
+                    if(correoPerfilAjeno_tx.text.toString()=="null")
+                        correoPerfilAjeno_tx.setText("")
+                    if(nicknamePerfilAjeno_tx.text.toString()=="null")
+                        nicknamePerfilAjeno_tx.setText("")
+
                     descripcionPerfilAjeno_tx.setText(it.getString("descripcion").toString())
                     if (apellidosPerfilAjeno_tx.text.toString() == "null")
                         apellidosPerfilAjeno_tx.setText("")
@@ -51,10 +64,19 @@ class PerfilAjenoActivity : AppCompatActivity() {
                         descripcionPerfilAjeno_tx.setText("")
 
                     var urlImagen = it.getString("imagen").toString()
-                    Glide.with(this)
-                        .load(urlImagen)
-                        .fitCenter()
-                        .into(imagenPerfilAjeno)
+                    if(urlImagen=="null"){
+                        urlImagen="https://firebasestorage.googleapis.com/v0/b/animezone-82466.appspot.com/o/ImagenPerfilPorDefecto%2Fsinperfil.png?alt=media&token=79062551-4c24-45d7-9243-21030e6755b9"
+                        Glide.with(this)
+                            .load(urlImagen)
+                            .fitCenter()
+                            .into(imagenPerfilAjeno)
+                    }
+                    else{
+                        Glide.with(this)
+                            .load(urlImagen)
+                            .fitCenter()
+                            .into(imagenPerfilAjeno)
+                    }
                     perfilajeno_circulo1.visibility= View.INVISIBLE
                     perfilajeno_circulo2.visibility= View.INVISIBLE
                 }
@@ -78,9 +100,7 @@ class PerfilAjenoActivity : AppCompatActivity() {
         seguir_btn.setOnClickListener {
             if (seguir_btn.text.toString() == "Seguir") {
                 seguir_btn.setText("Seguido")
-                val seguidor = Seguidor(
-                    autentificacion.currentUser.displayName
-                )
+                val seguidor = Seguidor(autentificacion.currentUser.displayName)
                 coleccionUsuarios.document(nicknamePerfilAjeno_tx.text.toString())
                     .collection("Seguidores").document(seguidor.usuarioId.toString()).set(seguidor)
                     .addOnSuccessListener {

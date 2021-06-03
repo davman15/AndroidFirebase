@@ -301,14 +301,14 @@
                         <ImageView
                             android:layout_width="114dp"
                             android:layout_height="110dp"
-                            android:src="@drawable/fondoanime"></ImageView>
+                            android:src="@drawable/ic_baseline_format_list_numbered_24"></ImageView>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginBottom="15dp"
                             android:gravity="center"
-                            android:text="Lista Publicaciones"
+                            android:text="Top"
                             android:textColor="#FFFFFF"
                             android:textSize="16sp" />
                     </LinearLayout>

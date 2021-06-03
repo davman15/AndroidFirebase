@@ -6,27 +6,27 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.animezone.R
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_listapublicaciones.*
 
 class ListaPublicacionesActivity : AppCompatActivity() {
-    //Variables de Firebase
-    private val autentificacion = FirebaseAuth.getInstance()
+
     private val basedeDatos = Firebase.firestore
-    private val lista = basedeDatos.collection("Publicaciones").orderBy("fecha", Query.Direction.DESCENDING)
+    private val lista = basedeDatos.collection("Publicaciones")
+        .orderBy("fecha", Query.Direction.DESCENDING)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listapublicaciones)
         listaPublicaciones_circulo2.visibility= View.VISIBLE
         listaPublicaciones_circulo1.visibility= View.VISIBLE
-        //Creo una coleccion de Publicaciones y convierto en objetos de tipo Publicaciones y lo ordeno desde la ultima publicacion a la primera publicada
+        //Creo una coleccion de Publicaciones y convierto en objetos de tipo Publicaciones y
+        // lo ordeno desde la ultima publicacion a la primera publicada
+
         lista.get().addOnSuccessListener {
             val publicaciones = it!!.toObjects(Publicacion::class.java)
-
             //Le agrego el id del usuario quien hizo la publicacion
             publicaciones.forEachIndexed { index, publicacion ->
                 publicacion.uid = it.documents[index].id
@@ -36,9 +36,7 @@ class ListaPublicacionesActivity : AppCompatActivity() {
                 //El tamaño es fijo del recyclerView
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(this@ListaPublicacionesActivity)
-                adapter = PublicacionAdapter(
-                    this@ListaPublicacionesActivity,
-                    publicaciones)
+                adapter = PublicacionAdapter(this@ListaPublicacionesActivity, publicaciones)
             }
             listaPublicaciones_circulo2.visibility= View.INVISIBLE
             listaPublicaciones_circulo1.visibility= View.INVISIBLE

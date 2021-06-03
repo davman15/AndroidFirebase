@@ -20,17 +20,12 @@ class WallpaperActivity : AppCompatActivity() {
         )
 
         //Las descripciones que van con cada foto
-        var titulosAnimes = arrayOf(
-            "Kimi No Nawa",
-            "Sword Art Online",
-            "Kimetsu no Yaiba",
-            "Jujutsu Kaisen",
-            "Hunter x Hunter",
-            "Naruto Shippuden",
-            "One Piece",
-            "Haikyuu",
+        var titulosAnimes = arrayOf("Kimi No Nawa", "Sword Art Online",
+            "Kimetsu no Yaiba", "Jujutsu Kaisen", "Hunter x Hunter",
+            "Naruto Shippuden", "One Piece", "Haikyuu",
             "One Punch Man"
         )
+
         //Array de Paisajes
         var imagenesPaisajes = intArrayOf(
             R.drawable.fondoanime, R.drawable.estrellado, R.drawable.wallpaper, R.drawable.pantano,
@@ -50,25 +45,19 @@ class WallpaperActivity : AppCompatActivity() {
         carrouselMangas(titulosMangas, imagenesMangas)
     }
 
-    private fun carrouselAnimes(
-        titulosAnimes: Array<String>,
-        imagenesAnimes: IntArray
-    ) {
+    private fun carrouselAnimes(titulosAnimes: Array<String>, imagenesAnimes: IntArray) {
         carruselAnimesFamosos.pageCount = titulosAnimes.size
-        //Coloco las imagenes en el
+        //Coloco las imagenes en el carrusel
         carruselAnimesFamosos.setImageListener { posicion, imageView ->
             imageView.setImageResource(imagenesAnimes[posicion])
         }
-
         //Si tu haces click a la imagen te da la descripcion mediante un toast
         carruselAnimesFamosos.setImageClickListener { posicion ->
             Toast.makeText(applicationContext, titulosAnimes[posicion], Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun carrouselPaisajes(
-        imagenesPaisajes: IntArray
-    ) {
+    private fun carrouselPaisajes(imagenesPaisajes: IntArray) {
         //Si no le decimos cuanto es su longitud no furula
         carruselPaisajes.pageCount = imagenesPaisajes.size
         //Coloco las imagenes en el
@@ -77,10 +66,7 @@ class WallpaperActivity : AppCompatActivity() {
         }
     }
 
-    private fun carrouselMangas(
-        titulosMangas: Array<String>,
-        imagenesMangas: IntArray
-    ) {
+    private fun carrouselMangas(titulosMangas: Array<String>, imagenesMangas: IntArray) {
         //Si no le decimos cuanto es su longitud no furula
         carruselMangas.pageCount = titulosMangas.size
         carruselMangas.setImageClickListener { posicion ->

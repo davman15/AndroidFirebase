@@ -1,7 +1,6 @@
 package com.example.animezone.Configuracion
 
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
@@ -193,7 +192,6 @@ class AutentificarCredencialesActivity : AppCompatActivity() {
                     }
             }
         }
-
     }
 
     private fun borrarUsuario() {

@@ -140,8 +140,6 @@ class MenuPrincipalActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
-
         wallpapers_menu.setOnClickListener {
             val intent = Intent(this, WallpaperActivity::class.java)
             startActivity(intent)
@@ -160,7 +158,8 @@ class MenuPrincipalActivity : AppCompatActivity() {
     private fun cargarDatosPersonales() {
         if (autentificacion.currentUser != null) {
             usuarioActual.text = autentificacion.currentUser.displayName
-            Glide.with(this).load(autentificacion.currentUser.photoUrl).fitCenter()
+            Glide.with(this).load(autentificacion.currentUser.photoUrl)
+                .fitCenter()
                 .into(imagenMenuLateralPerfil)
             basedeDatos.collection("Usuarios").document(autentificacion.currentUser.displayName)
                 .addSnapshotListener { snapshot, e ->
