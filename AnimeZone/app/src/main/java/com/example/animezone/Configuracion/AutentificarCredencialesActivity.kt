@@ -3,11 +3,13 @@ package com.example.animezone.Configuracion
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Html
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.animezone.R
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_autentificar_credenciales.*
@@ -17,7 +19,7 @@ class AutentificarCredencialesActivity : AppCompatActivity() {
     private var autentificacion = Firebase.auth
     private val usuarioConectado = Firebase.auth.currentUser
     private var referenciaUsuarios = baseDatos.collection("Usuarios")
-    private var saberUsuarioConectado=""
+    private var saberUsuarioConectado = ""
     private var referenciaNotificacionesNoLeidas =
         baseDatos.collection("Usuarios").document(autentificacion.currentUser.displayName)
             .collection("Notificaciones No Leidas")
@@ -38,15 +40,18 @@ class AutentificarCredencialesActivity : AppCompatActivity() {
         baseDatos.collection("Usuarios").document(autentificacion.currentUser.displayName)
             .collection("chats")
 
+    private var referenciaTopAnime=baseDatos.collection("Usuarios").document(autentificacion.currentUser.displayName).collection("TopAnime")
+    private var referenciaSeguidos=baseDatos.collection("Usuarios").document(autentificacion.currentUser.displayName).collection("Seguidos")
+    private var referenciaPublicaciones = baseDatos.collection("Publicaciones")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_autentificar_credenciales)
         informacion_Alerta()
-        saberUsuarioConectado=autentificacion.currentUser.displayName
+        saberUsuarioConectado = autentificacion.currentUser.displayName
         validar_credenciales_btn.setOnClickListener {
-            if (validar_email_text.text.toString().trim() == "") {
-                validar_email_text.setError("Introduzca su email")
-                validar_email_text.requestFocus()
+            if (validar_email_tx.text.toString().trim() == "") {
+                validar_email_tx.setError("Introduzca su email")
+                validar_email_tx.requestFocus()
                 return@setOnClickListener
             } else if (validar_contrasena_text.text.toString() == "") {
                 validar_contrasena_text.setError("Introduzca su contraseña")
@@ -54,7 +59,7 @@ class AutentificarCredencialesActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             val credenciales = EmailAuthProvider.getCredential(
-                validar_email_text.text.toString(),
+                validar_email_tx.text.toString(),
                 validar_contrasena_text.text.toString()
             )
 
@@ -87,7 +92,6 @@ class AutentificarCredencialesActivity : AppCompatActivity() {
     }
 
 
-
     private fun elegirBorrarCuenta() {
         AlertDialog.Builder(this).apply {
             setTitle("Eliminar Cuenta")
@@ -101,10 +105,12 @@ class AutentificarCredencialesActivity : AppCompatActivity() {
 
 
     private fun eliminarNotificacionesNoLeidas() {
+        circulo1_credenciales1.visibility = View.VISIBLE
+        circulo1_credenciales2.visibility = View.VISIBLE
         referenciaNotificacionesNoLeidas.get().addOnSuccessListener { notificacionesNoLeidas ->
-            if (notificacionesNoLeidas.isEmpty) {
+            if (notificacionesNoLeidas.isEmpty)
                 eliminarNotificaciones()
-            } else {
+            else {
                 for (notificacion in notificacionesNoLeidas) {
                     referenciaNotificacionesNoLeidas.document(notificacion.id).delete()
                         .addOnCompleteListener {
@@ -161,11 +167,40 @@ class AutentificarCredencialesActivity : AppCompatActivity() {
     private fun eliminarFavoritos() {
         referenciaFavoritos.get().addOnSuccessListener { favorito ->
             if (favorito.isEmpty) {
-                eliminarListaSeguidoresAjeno()
+                eliminarSeguidos()
             }
             for (fav in favorito) {
                 referenciaFavoritos.document(fav.id).delete().addOnCompleteListener {
-                    eliminarListaSeguidoresAjeno()
+                    eliminarSeguidos()
+                }
+            }
+        }
+    }
+
+    private fun eliminarSeguidos(){
+        referenciaSeguidos.get().addOnSuccessListener { seguidos ->
+            if(seguidos.isEmpty)
+                eliminarTopAnimes()
+            else{
+                for(seguido in seguidos){
+                    referenciaSeguidos.document(seguido.id).delete().addOnCompleteListener {
+                        eliminarTopAnimes()
+                    }
+                }
+            }
+
+        }
+    }
+
+    private fun eliminarTopAnimes() {
+        referenciaTopAnime.get().addOnSuccessListener { animes ->
+            if(animes.isEmpty)
+                eliminarListaSeguidoresAjeno()
+            else {
+                for (anime in animes) {
+                    referenciaTopAnime.document(anime.id).delete().addOnCompleteListener {
+                        eliminarListaSeguidoresAjeno()
+                    }
                 }
             }
         }
@@ -176,9 +211,7 @@ class AutentificarCredencialesActivity : AppCompatActivity() {
             for (usuario in usuarios) {
                 referenciaUsuarios.document(usuario.id).collection("Seguidores").get()
                     .addOnSuccessListener { seguidores ->
-                        println("entro")
                         if (seguidores.isEmpty) {
-                            println("Entro en favoritos ajeno no existe")
                             borrarUsuario()
                         } else {
                             for (seguidor in seguidores) {
@@ -199,36 +232,50 @@ class AutentificarCredencialesActivity : AppCompatActivity() {
             .document(saberUsuarioConectado)
             .delete()
             .addOnSuccessListener {
-                println("Entro en usuarios que existe")
-                eliminarPublicacionesYCredenciales()
+                eliminarPublicaciones()
             }
     }
 
-    private fun eliminarPublicacionesYCredenciales() {
-        baseDatos.collection("Publicaciones")
+    private fun eliminarPublicaciones() {
+        referenciaPublicaciones
             .whereEqualTo("usuarioNombre", autentificacion.currentUser.displayName).get()
             .addOnSuccessListener {
                 if (it.isEmpty) {
-                    println("entro en credenciales")
-                    usuarioConectado.delete()
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                //Borra la actual actividad mas todas las de la aplicacion
-                                finishAffinity()
-                            }
-                        }
+                    eliminarCredenciales()
                 } else {
                     for (documento in it) {
-                        baseDatos.collection("Publicaciones")
+                        referenciaPublicaciones
                             .document(documento.id).delete().addOnCompleteListener {
-                                usuarioConectado.delete()
-                                    .addOnCompleteListener { task ->
-                                        if (task.isSuccessful) {
-                                            finishAffinity()
-                                        }
-                                    }
+                                eliminarOpiniones(documento)
                             }
                     }
+                }
+            }
+    }
+
+    private fun eliminarOpiniones(documento: QueryDocumentSnapshot) {
+        referenciaPublicaciones.document(documento.id).collection("opiniones").get()
+            .addOnSuccessListener { it1 ->
+                if (it1.isEmpty)
+                    eliminarCredenciales()
+                else {
+                    for (opinion in it1) {
+                        referenciaPublicaciones.document(documento.id).collection("opiniones")
+                            .document(opinion.id).delete().addOnCompleteListener {
+                                eliminarCredenciales()
+                            }
+                    }
+                }
+            }
+    }
+
+    private fun eliminarCredenciales() {
+        usuarioConectado.delete()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    circulo1_credenciales1.visibility = View.INVISIBLE
+                    circulo1_credenciales2.visibility = View.INVISIBLE
+                    finishAffinity()
                 }
             }
     }

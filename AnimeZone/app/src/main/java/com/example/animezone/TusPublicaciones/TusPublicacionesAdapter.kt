@@ -62,7 +62,7 @@ class TusPublicacionesAdapter(private val activity: Activity, private var listaT
                     .into(holder.itemView.imagenPerfilFavorito)
             }
 
-        borrarPublicacionesFavoritas(holder, publicaciones)
+        borrarPublicaciones(holder, publicaciones)
 
         holder.itemView.imagenPerfilFavorito.setOnClickListener {
             irPerfilAjeno(holder)
@@ -72,7 +72,7 @@ class TusPublicacionesAdapter(private val activity: Activity, private var listaT
         }
     }
 
-    private fun borrarPublicacionesFavoritas(
+    private fun borrarPublicaciones(
         holder: TusPublicacionesAdapterViewHolder,
         publicaciones: Publicacion
     ) {
@@ -83,15 +83,27 @@ class TusPublicacionesAdapter(private val activity: Activity, private var listaT
                 setMessage("La publicacion será borrada permanentemente, ¿Estás Seguro?")
                 //Si le da que "Si" el usuario lo borrará el id de la coleccion publicaciones por lo q se borrará
                 setPositiveButton(Html.fromHtml("<font color='#FFFFFF'>Si</font>")) { dialogInterface: DialogInterface, i: Int ->
-                    baseDatos.collection("Publicaciones").document(publicaciones.uid!!).delete()
-                        .addOnSuccessListener {
+                    baseDatos.collection("Publicaciones").document(publicaciones.uid!!).collection("opiniones").get().addOnSuccessListener {
+                        if(it.isEmpty)
+                            borrarPublicacion(publicaciones)
+                        else{
+                            for(publicacion in it){
+                                baseDatos.collection("Publicaciones").document(publicaciones.uid!!).collection("opiniones").document(publicacion.id).delete().addOnSuccessListener {
+                                    borrarPublicacion(publicaciones)
+                                }
+                            }
                         }
+                    }
+
                 }
-                //Si le da que "No" no hará nada
                 setNegativeButton(Html.fromHtml("<font color='#FFFFFF'>No</font>"), null)
             }.show()
             return@setOnLongClickListener true
         }
+    }
+
+    private fun borrarPublicacion(publicaciones: Publicacion) {
+        baseDatos.collection("Publicaciones").document(publicaciones.uid!!).delete()
     }
 
     private fun irPerfilAjeno(holder: TusPublicacionesAdapterViewHolder) {

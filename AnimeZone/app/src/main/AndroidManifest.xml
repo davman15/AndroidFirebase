@@ -13,7 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Configuracion.CambiarContrasenaActivity"></activity>
+        <activity android:name=".Top.TopAjenoActivity"></activity>
+        <activity android:name=".Top.TopSeguidosActivity" />
+        <activity android:name=".Top.MostrarInformacionActivity" />
+        <activity android:name=".Top.TopActivity" />
+        <activity android:name=".InicioSesion.ContrasenaOlvidadaActivity" />
+        <activity android:name=".Configuracion.CambiarContrasenaActivity" />
         <activity android:name=".Configuracion.AutentificarCredencialesActivity" />
         <activity android:name=".TusPublicaciones.TusPublicacionesActivity" />
         <activity android:name=".Wallpapers.WallpaperActivity" />

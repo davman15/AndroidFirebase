@@ -9,7 +9,6 @@ import com.example.animezone.Clase.Usuario
 import com.example.animezone.Perfil.PerfilAjenoActivity
 import com.example.animezone.R
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_seguidores.*
@@ -33,11 +32,18 @@ class SeguidoresActivity : AppCompatActivity() {
             .collection("Seguidores").orderBy("usuarioId")
             .addSnapshotListener { value, error ->
                 val listaUsuarios = value?.toObjects(Usuario::class.java)
+
+                if(listaUsuarios!!.size<=0)
+                    notienesseguidores_tx.visibility=View.VISIBLE
+                else
+                    notienesseguidores_tx.visibility=View.INVISIBLE
+
                 if (listaUsuarios != null) {
                   (listaSeguidores.adapter as SeguidoresAdapter).listaActualizada(listaUsuarios)
                     listaSeguidores_circulo2.visibility= View.INVISIBLE
                     listaSeguidores_circulo1.visibility= View.INVISIBLE
                 }
+
             }
     }
 

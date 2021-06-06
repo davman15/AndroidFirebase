@@ -5,13 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.animezone.Publicaciones.Publicacion
-import com.example.animezone.PublicacionesFavoritas.PublicacionesFavoritasAdapter
 import com.example.animezone.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_publicaciones_favoritas.*
 import kotlinx.android.synthetic.main.activity_tus_publicaciones.*
 
 class TusPublicacionesActivity : AppCompatActivity() {

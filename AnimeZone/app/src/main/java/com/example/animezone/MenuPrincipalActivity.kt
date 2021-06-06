@@ -20,6 +20,8 @@ import com.example.animezone.Perfil.PerfilActivity
 import com.example.animezone.Publicaciones.ListaPublicacionesActivity
 import com.example.animezone.PublicacionesFavoritas.PublicacionesFavoritasActivity
 import com.example.animezone.Seguidores.SeguidoresActivity
+import com.example.animezone.Top.TopActivity
+import com.example.animezone.Top.TopSeguidosActivity
 import com.example.animezone.TusPublicaciones.TusPublicacionesActivity
 import com.example.animezone.Wallpapers.WallpaperActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -86,6 +88,8 @@ class MenuPrincipalActivity : AppCompatActivity() {
                 }
             }
         }
+
+
         tusPublicaciones_menuLateral.setOnClickListener {
             val intent = Intent(this, TusPublicacionesActivity::class.java)
             startActivity(intent)
@@ -140,8 +144,18 @@ class MenuPrincipalActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        verTop.setOnClickListener {
+            val intent = Intent(this, TopActivity::class.java)
+            startActivity(intent)
+        }
+
         wallpapers_menu.setOnClickListener {
             val intent = Intent(this, WallpaperActivity::class.java)
+            startActivity(intent)
+        }
+
+        verTopSeguidos.setOnClickListener {
+            val intent = Intent(this, TopSeguidosActivity::class.java)
             startActivity(intent)
         }
 

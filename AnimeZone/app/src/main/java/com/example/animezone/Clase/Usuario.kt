@@ -5,7 +5,6 @@ class Usuario(
     val apellidos:String?=null,
     val correo: String? = null,
     var usuarioId: String? = null,
-    val contrasena: String? = null,
     val imagen:String?=null,
     val descripcion:String?=null
 )

@@ -291,6 +291,7 @@
                     android:foreground="?android:attr/selectableItemBackground">
 
                     <LinearLayout
+                        android:id="@+id/verTop"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -326,6 +327,7 @@
                     >
 
                     <LinearLayout
+                        android:id="@+id/verTopSeguidos"
                         android:clickable="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:layout_width="match_parent"
@@ -336,14 +338,14 @@
                         <ImageView
                             android:layout_width="114dp"
                             android:layout_height="110dp"
-                            android:src="@drawable/fondoanime"></ImageView>
+                            android:src="@drawable/top_seguidos_icono"></ImageView>
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginBottom="15dp"
                             android:gravity="center"
-                            android:text="Lista Publicaciones"
+                            android:text="Mis Seguidos"
                             android:textColor="#FFFFFF"
                             android:textSize="16sp" />
                     </LinearLayout>

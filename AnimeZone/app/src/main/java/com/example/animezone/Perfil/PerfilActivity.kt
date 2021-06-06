@@ -36,7 +36,7 @@ class PerfilActivity : AppCompatActivity() {
     private var campoCorreoTextoPerfil = ""
     private var campoNombreIdTextoPerfil = ""
     private var campoDescripcionTextoPerfil=""
-    private var valorContrasena=""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil)
@@ -52,7 +52,7 @@ class PerfilActivity : AppCompatActivity() {
                 correoPerfil_texto.setText(it.getString("correo").toString())
                 nicknamePerfil_texto.setText(it.getString("usuarioId").toString())
                 descripcion_texto.setText(it.getString("descripcion").toString())
-                valorContrasena=it.getString("contrasena").toString()
+
                 if (apellidosPerfil_texto.text.toString() == "null")
                     apellidosPerfil_texto.setText("")
 
@@ -131,7 +131,6 @@ class PerfilActivity : AppCompatActivity() {
                     campoApellidosTextoPerfil,
                     campoCorreoTextoPerfil,
                     campoNombreIdTextoPerfil,
-                    valorContrasena,
                     campoDescripcionTextoPerfil
                 )
                 camposPerfil(false)
@@ -147,19 +146,19 @@ class PerfilActivity : AppCompatActivity() {
         descripcion_texto.isEnabled=desactivador
     }
 
-    private fun comprobarFoto(nombre: String, apellidos: String, correo: String, usuarioId: String, contrasena: String, descripcion: String) {
+    private fun comprobarFoto(nombre: String, apellidos: String, correo: String, usuarioId: String, descripcion: String) {
         var foto = ""
         if (imagenUri == null) {
             foto = autentificacion.currentUser.photoUrl.toString()
-            actualizarPerfil(nombre, apellidos, correo, usuarioId, contrasena, foto,descripcion)
+            actualizarPerfil(nombre, apellidos, correo, usuarioId, foto,descripcion)
         } else {
             storageReferencia.child("$usuarioId/" + autentificacion.currentUser.displayName.toString())
                 .delete()
                 .addOnSuccessListener {
-                    crearReferenciaSustituir(usuarioId, foto, nombre, apellidos, correo, contrasena,descripcion)
+                    crearReferenciaSustituir(usuarioId, foto, nombre, apellidos, correo,descripcion)
                 }
                 .addOnFailureListener {
-                    crearReferenciaSustituir(usuarioId, foto, nombre, apellidos, correo, contrasena,descripcion)
+                    crearReferenciaSustituir(usuarioId, foto, nombre, apellidos, correo, descripcion)
                 }
         }
     }
@@ -171,7 +170,6 @@ class PerfilActivity : AppCompatActivity() {
         nombre: String,
         apellidos: String,
         correo: String,
-        contrasena: String,
         descripcion: String
     ) {
         //Aqui creo la subcarpeta de la referencia
@@ -181,13 +179,13 @@ class PerfilActivity : AppCompatActivity() {
             //Si se sube bien al Storage, Creo el link con downloadURL
             folder.downloadUrl.addOnSuccessListener { urlImagen ->
                 foto1 = urlImagen.toString()
-                actualizarPerfil(nombre, apellidos, correo, usuarioId,contrasena, foto1,descripcion)
+                actualizarPerfil(nombre, apellidos, correo, usuarioId, foto1,descripcion)
             }
         }
     }
 
-    private fun actualizarPerfil(nombre: String, apellidos: String, correo: String, usuarioId: String, contrasena: String, foto: String, descripcion: String) {
-        val usuario: Usuario = Usuario(nombre, apellidos, correo, usuarioId, contrasena, foto, descripcion)
+    private fun actualizarPerfil(nombre: String, apellidos: String, correo: String, usuarioId: String, foto: String, descripcion: String) {
+        val usuario: Usuario = Usuario(nombre, apellidos, correo, usuarioId,  foto, descripcion)
         nombre_ImagenPerfil.setText(autentificacion.currentUser.displayName)
         baseDatos.collection("Usuarios").document(campoNombreIdTextoPerfil).set(usuario)
             .addOnSuccessListener {

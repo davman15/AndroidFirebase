@@ -22,6 +22,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
+    <ProgressBar
+        android:id="@+id/circulo1_credenciales2"
+        android:visibility="invisible"
+        android:background="@drawable/estilo_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:rotation="180"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/circulo1_credenciales1"
+        android:visibility="invisible"
+        android:background="@drawable/estilo_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:id="@+id/textView20"
         android:layout_width="wrap_content"
@@ -36,10 +60,10 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/validar_email_text" />
+        app:layout_constraintTop_toBottomOf="@+id/validar_email_tx" />
 
     <EditText
-        android:id="@+id/validar_email_text"
+        android:id="@+id/validar_email_tx"
         android:layout_width="320dp"
         android:layout_height="46dp"
         android:layout_marginTop="20dp"

@@ -69,6 +69,10 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        olvidar_contrasena.setOnClickListener {
+            val intent = Intent(this, ContrasenaOlvidadaActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 

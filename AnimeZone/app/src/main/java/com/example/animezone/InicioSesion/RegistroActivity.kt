@@ -17,8 +17,6 @@ import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_registro.*
-import java.math.BigInteger
-import java.security.MessageDigest
 
 class RegistroActivity : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
@@ -119,27 +117,19 @@ class RegistroActivity : AppCompatActivity() {
                 }
             }
             .addOnSuccessListener {
-                var contrasenaEncriptada=md5(contrasena)
-                println(contrasenaEncriptada)
-                registrarUsuario(nombre, email, usuarioId, contrasenaEncriptada)
-
+                registrarUsuario(nombre, email, usuarioId)
             }
     }
 
-    private fun md5(input:String): String {
-        val md = MessageDigest.getInstance("MD5")
-        return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')
-    }
 
     private fun registrarUsuario(
         nombre: String,
         email: String,
-        usuarioId: String,
-        contrasena: String
+        usuarioId: String
     ) {
         val foto = "https://firebasestorage.googleapis.com/v0/b/animezone-82466.appspot.com/o/ImagenPerfilPorDefecto%2Fsinperfil.png?" +
                 "alt=media&token=79062551-4c24-45d7-9243-21030e6755b9"
-        val usuario = Usuario(nombre, null, email, usuarioId, contrasena, foto, "Me encanta el anime. espero que nos llevemos bien!! xD")
+        val usuario = Usuario(nombre, null, email, usuarioId,  foto, "Me encanta el anime. espero que nos llevemos bien!! xD")
 
         basedeDatos.collection("Usuarios").document(usuarioId).set(usuario)
 
